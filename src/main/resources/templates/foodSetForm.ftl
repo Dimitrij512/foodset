@@ -1,4 +1,4 @@
-<html>
+<html lang="u">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -149,7 +149,7 @@
 
 
         date_input.datepicker({
-            format: 'dd-mm-yyyy',
+            format: 'yyyy-mm-dd',
             container: container,
             todayHighlight: true,
             autoclose: true,
@@ -166,18 +166,18 @@
 
 <body>
 
-<form action="index.html" method="post">
+<form action="/register-food-set-form" method="post">
 
     <h1>Реєстрація</h1>
 
     <fieldset>
         <legend><span class="number">1</span> Вибріть день</legend>
 
-        <label for="name">День:</label>
+        <label for="date">День:</label>
         <input class="form-control" id="date" name="date" placeholder="день-місяць-рік" type="text"/>
 
-        <label for="hour">Година:</label>
-        <select id="hour" name="hour">
+        <label for="time">Година:</label>
+        <select id="time" name="time">
                 <option value="14:00">14:00</option>
                 <option value="15:00">15:00</option>
         </select>
@@ -187,16 +187,16 @@
         <legend><span class="number">2</span> Ваші дані</legend>
 
         <label for="name">Ім'я:</label>
-        <input type="text" id="name" name="user_name">
+        <input type="text" id="name" name="name">
 
         <label for="surname">Прізвище:</label>
-        <input type="text" id="surname" name="user_surname">
+        <input type="text" id="surname" name="surname">
 
-        <label for="phone">Номер телефону:</label>
-        <input type="text" id="phone" name="user_phone">
+        <label for="phone_number">Номер телефону:</label>
+        <input type="text" id="phone_number" name="phoneNumber">
 
         <label for="kids_count">Кількість дітей в сім'ї:</label>
-        <select id="hour" name="kids_count">
+        <select id="kids_count" name="kidsCount">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -207,8 +207,8 @@
         </select>
 
         <label>Тип набору:</label>
-        <input type="radio" id="food_set" value="food_set" name="set_type"><label for="food_set" class="light">Продуктовий набір</label><br>
-        <input type="radio" id="complex_dinner" value="complex_dinner" name="set_type"><label for="complex_dinner" class="light">Комплексний обід</label>
+        <input type="radio" id="food_set" value="FOOD_SET" name="typeSet"><label for="food_set" class="light">Продуктовий набір</label><br>
+        <input type="radio" id="complex_dinner" value="COMPLEX_DINNER" name="typeSet"><label for="complex_dinner" class="light">Комплексний обід</label>
     </fieldset>
 
     <button type="submit">Надіслати</button>

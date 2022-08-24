@@ -1,15 +1,49 @@
 package com.church.warsaw.help.refugees.foodsets.controller;
 
-
+import com.church.warsaw.help.refugees.foodsets.dto.RegistrationInfo;
+import com.church.warsaw.help.refugees.foodsets.service.RegistrationInfoService;
+import java.time.LocalDate;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@AllArgsConstructor
 public class FoodSetFormController {
 
-    @GetMapping("/food-set-form")
-    public String foodSetFormPage(Model model) {
-        return "foodSetForm";
-    }
+  private final RegistrationInfoService registrationInfoService;
+
+  @GetMapping("/food-set-form")
+  public String foodSetFormPage() {
+    return "foodSetForm";
+  }
+
+  @PostMapping("/register-food-set-form")
+  public String registerForm(@ModelAttribute RegistrationInfo registrationInfo) {
+    registrationInfoService.registerForm(registrationInfo);
+
+    return "foodSetFormSuccess";
+  }
+
+  @GetMapping("refugee/registration-infos")
+  public String getRegistrationInfos(@RequestParam(name = "receiveDate", required = false)
+                                     @DateTimeFormat(pattern = "yyyy-mm-dd")
+                                     LocalDate receiveDate,
+                                     Model model) {
+
+    LocalDate date = receiveDate == null ? LocalDate.now() : receiveDate;
+    List<RegistrationInfo> registrationInfos =
+        registrationInfoService.getRegistrationInfoByDate(date);
+
+    model.addAttribute("registrationInfos", registrationInfos);
+
+    return "registrationInfos";
+  }
+
 }
