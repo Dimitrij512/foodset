@@ -141,7 +141,7 @@
 
 <script>
     $(document).ready(function(){
-        let date_input=$('input[name="date"]'); //our date input has the name "date"
+        let date_input=$('input[name="date"]');
         let container=$('.bootstrap-iso').length>0 ? $('.bootstrap-iso').parent() : "body";
 
         let oneWeekFuture = new Date();

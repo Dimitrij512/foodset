@@ -1,6 +1,9 @@
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<#--    <!-- Bootstrap Date-Picker Plugin &ndash;&gt;-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 <!------ Include the above in your HEAD tag ---------->
 
 <style>
@@ -36,6 +39,44 @@
 
 <script>
     $(document).ready(function () {
+
+        $('#generate-pdf').click(function () {
+            window.location.href='/refugee/registration-infos/generate-pdf-file';
+        });
+
+        document.getElementById('date').value = new Date().toISOString().split('T')[0];
+
+        let date_input=$('input[name="date"]');
+        let container=$('.bootstrap-iso').length>0 ? $('.bootstrap-iso').parent() : "body";
+        date_input.datepicker({
+            format: 'yyyy-mm-dd',
+            container: container,
+            todayHighlight: true,
+            autoclose: true
+        });
+
+        $('#date').datepicker().on("changeDate", function() {
+            let selectedDate = $('#date').val();
+            $.get("/refugee/registration-infos-content/?receiveDate=" + selectedDate, function (response) {
+
+                $(".reg-info-table-body").empty();
+                response.forEach(function(refugeesInfo) {
+                   let html =
+                        '<tr>'
+                        + '<td>' + refugeesInfo.date + '</td>'
+                        + '<td>' + refugeesInfo.time + '</td>'
+                        + '<td>' + refugeesInfo.phoneNumber + '</td>'
+                        + '<td>' + refugeesInfo.surname + '</td>'
+                        + '<td>' + refugeesInfo.name + '</td>'
+                        + '<td>' + refugeesInfo.kidsCount + '</td>'
+                        + '<td>' + refugeesInfo.typeSet + '</td>'
+                        + '<td>' + refugeesInfo.isReceive + '</td>' +
+                        "</tr>"
+                    $(".reg-info-table-body").append(html);
+                });
+            });
+        });
+
         $('.filterable .btn-filter').click(function () {
             var $panel = $(this).parents('.filterable'),
                 $filters = $panel.find('.filters input'),
@@ -66,19 +107,14 @@
                 var value = $(this).find('td').eq(column).text().toLowerCase();
                 return value.indexOf(inputContent) === -1;
             });
-            /* Clean previous no-result if exist */
             $table.find('tbody .no-result').remove();
-            /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
             $rows.show();
             $filteredRows.hide();
-            /* Prepend no-result row if all rows are filtered */
             if ($filteredRows.length === $rows.length) {
                 $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="' + $table.find('.filters th').length + '">No result found</td></tr>'));
             }
         });
     });
-
-
 </script>
 
 <div class="container">
@@ -86,11 +122,22 @@
         <div class="panel panel-primary filterable">
             <div class="panel-heading">
                 <h3 class="panel-title">Інформація про реєстрацію </h3>
+
                 <div class="pull-right">
+                    <button class="btn btn-default btn-xs btn-generate-pdf" id="generate-pdf"><span class="glyphicon glyphicon-file"></span>
+                        pdf
+                    </button>
+                </div>
+                <div class="pull-right" style="margin-right: 2px">
                     <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span>
                         Фільтр
                     </button>
                 </div>
+
+                <div class="pull-right input-group" style="margin-right: 2px">
+                    <input class="btn btn-default btn-xs"  id="date" name="date" placeholder="дата" type="text">
+                </div>
+
             </div>
             <table class="table">
                 <thead>
@@ -105,7 +152,7 @@
                     <th><input type="text" class="form-control" placeholder="Видано" disabled></th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="reg-info-table-body">
                 <#list registrationInfos as registrationInfo>
                     <tr>
                         <td>${registrationInfo.date}</td>

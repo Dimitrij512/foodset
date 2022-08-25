@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @AllArgsConstructor
@@ -52,6 +53,16 @@ public class FoodSetFormController {
     model.addAttribute("registrationInfos", registrationInfos);
 
     return "registrationInfos";
+  }
+
+  @GetMapping("refugee/registration-infos-content")
+  @ResponseBody
+  public List<RegistrationInfo> getRegistrationInfosContent(@RequestParam(name = "receiveDate", required = false)
+                                                            String receiveDate) {
+
+    LocalDate date = receiveDate == null ? LocalDate.now() : LocalDate.parse(receiveDate);
+
+    return registrationInfoService.getRegistrationInfoByDate(date);
   }
 
   @GetMapping("refugee/registration-infos/generate-pdf-file")
