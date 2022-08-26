@@ -2,14 +2,13 @@ package com.church.warsaw.help.refugees.foodsets.service;
 
 import static java.lang.String.format;
 
-import com.church.warsaw.help.refugees.foodsets.dto.FoodSetInfo;
-import com.church.warsaw.help.refugees.foodsets.dto.Refugee;
+import com.church.warsaw.help.refugees.foodsets.controller.UpdateRegistrationInfoRequest;
 import com.church.warsaw.help.refugees.foodsets.dto.RegistrationInfo;
+import com.church.warsaw.help.refugees.foodsets.entity.RegistrationInfoEntity;
+import com.church.warsaw.help.refugees.foodsets.mapper.RegistrationInfoMapper;
+import com.church.warsaw.help.refugees.foodsets.repository.RegistrationInfoRepository;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,36 +20,47 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RegistrationInfoService {
 
-  private final RefugeeService refugeeService;
-
-  private final FoodSetInfoService foodSetInfoService;
-
+   private final RegistrationInfoRepository repository;
 
   @Transactional
   public void registerForm(RegistrationInfo registrationInfo) {
 
-    Refugee refugee = refugeeService.save(Refugee.of(registrationInfo));
-    foodSetInfoService.save(FoodSetInfo.of(refugee.getId(), registrationInfo));
-    log.info("Registering form for refugee by id={} is successfully", refugee.getId());
+    RegistrationInfoEntity regInfo =
+        repository.save(RegistrationInfoMapper.INSTANCE.toEntity(registrationInfo));
+
+    log.info("Registered form by id={}", regInfo.getId());
+  }
+
+  @Transactional
+  public void updateForm(String id, UpdateRegistrationInfoRequest request) {
+
+    if(!repository.existsById(id)) {
+      throw new IllegalArgumentException(format("Not found registrationInfo by id=%s", id));
+    }
+    RegistrationInfoEntity entityById = repository.findById(id).get();
+    entityById.setReceive(getReceived(request.getReceived()));
+    entityById.setComment(request.getComment());
+
+    repository.save(entityById);
+
+    log.info("RegistrationInfo by id={} has been updated successfully", id);
+
   }
 
   @Transactional(readOnly = true)
-  public List<RegistrationInfo> getRegistrationInfoByDate(LocalDate localDate) {
+  public List<RegistrationInfo> getRegistrationInfoByDate(LocalDate receiveDate) {
 
-    List<FoodSetInfo> foodSetInfos = foodSetInfoService.findAllByDate(localDate);
+    List<RegistrationInfoEntity> allByReceiveDate = repository.findAllByReceiveDate(receiveDate);
 
-    Map<String, FoodSetInfo> foodSetMap = foodSetInfos.stream()
-        .collect(Collectors.toMap(FoodSetInfo::getRefugeeId, Function.identity()));
+    log.info("Found registrationInfos count={}, by date={}", allByReceiveDate.size(), receiveDate);
 
-    return refugeeService.findAllByIds(foodSetMap.keySet()).stream()
-        .map(r -> {
-          FoodSetInfo foodSetInfo = Optional.ofNullable(foodSetMap.get(r.getId()))
-              .orElseThrow(() ->
-                  new IllegalArgumentException(
-                      format("Not found foodSet for refugee with id = %s", r.getId())));
+    return allByReceiveDate.stream()
+        .map(RegistrationInfoMapper.INSTANCE::toDto)
+        .collect(Collectors.toList());
+  }
 
-          return RegistrationInfo.of(r, foodSetInfo);
-        }).collect(Collectors.toList());
+  public boolean getReceived(String receiveString) {
+    return "Так".equals(receiveString);
   }
 
 }

@@ -41,10 +41,42 @@
     $(document).ready(function () {
 
         $('#generate-pdf').click(function () {
-            window.location.href='/refugee/registration-infos/generate-pdf-file';
+            let selectedDate = $('#date').val();
+            window.location.href='/registration-infos/generate-pdf-file/?receiveDate='+ selectedDate;
         });
 
         document.getElementById('date').value = new Date().toISOString().split('T')[0];
+
+        $('tbody').on('focus', 'button', function() {
+            let saveButton = $(this).closest('tr').find('.reg-info-row-save');
+            let editButton = $(this).closest('tr').find('.reg-info-row-edit');
+
+            //edit
+            if(saveButton.is(':disabled')) {
+                $(this).closest('tr').find('.is-receive-row-select').prop("disabled", false)
+                $(this).prop("disabled", true).css('color', 'gray');
+                saveButton.prop("disabled", false).css('color', 'green');
+            // save
+            } else {
+                let isReceive =  $(this).closest('tr').find('.is-receive-row-select').find(":selected").text();
+                let registrationInfoId =  $(this).closest('tr').find('.info-id').text();
+
+                $(this).closest('tr').find('.is-receive-row-select').prop("disabled", true);
+                $(this).prop("disabled", true).css('color', 'gray');
+                editButton.prop("disabled", false).css('color', 'green');
+
+                $.ajax({
+                    type: "PUT",
+                    url: "/registration-infos/" + registrationInfoId,
+                    accept: 'application/json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        received: "" + isReceive + "" ,
+                        comment: ""
+                    })
+                });
+            }
+        });
 
         let date_input=$('input[name="date"]');
         let container=$('.bootstrap-iso').length>0 ? $('.bootstrap-iso').parent() : "body";
@@ -57,21 +89,32 @@
 
         $('#date').datepicker().on("changeDate", function() {
             let selectedDate = $('#date').val();
-            $.get("/refugee/registration-infos-content/?receiveDate=" + selectedDate, function (response) {
+            $.get("/registration-infos-content/?receiveDate=" + selectedDate, function (response) {
 
                 $(".reg-info-table-body").empty();
                 response.forEach(function(refugeesInfo) {
                    let html =
                         '<tr>'
-                        + '<td>' + refugeesInfo.date + '</td>'
-                        + '<td>' + refugeesInfo.time + '</td>'
+                        + '<td class="info-id" style="display: none">' + refugeesInfo.id + '</td>'
+                        + '<td>' + refugeesInfo.receiveDate + '</td>'
+                        + '<td>' + refugeesInfo.stream + '</td>'
                         + '<td>' + refugeesInfo.phoneNumber + '</td>'
                         + '<td>' + refugeesInfo.surname + '</td>'
                         + '<td>' + refugeesInfo.name + '</td>'
                         + '<td>' + refugeesInfo.kidsCount + '</td>'
                         + '<td>' + refugeesInfo.typeSet + '</td>'
-                        + '<td>' + refugeesInfo.isReceive + '</td>' +
-                        "</tr>"
+                        // + '<td class="is-receive-row">' + refugeesInfo.isReceive + '</td>'
+                        + '<td class="is-receive-row" id=  + refugeesInfo.id>'
+                              + '<select disabled class="is-receive-row-select">'
+                                  + '<option selected>' + refugeesInfo.receive + '</option>'
+                                  + '<option>Так</option>'
+                                  + '<option>Ні</option>'
+                              + '</select>'
+                        + '</td>'
+                        + '<td><button id="edit" class="btn btn-default reg-info-row-edit" style="color:green;""><span class="glyphicon glyphicon-edit"></span></button></td>'
+                        + '<td><button id="save" class="btn btn-default reg-info-row-save" disabled><span class="glyphicon glyphicon-saved"></span></button></td>' +
+                        '</tr>';
+
                     $(".reg-info-table-body").append(html);
                 });
             });
@@ -139,30 +182,39 @@
                 </div>
 
             </div>
-            <table class="table">
+            <table class="table" id="infos-table-id">
                 <thead>
                 <tr class="filters">
                     <th><input type="text" class="form-control" placeholder="Дата" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="Час" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Потік" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Телефон" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Фамілія" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Ім'я" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="Кільікість дітей" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="Тип допомоги" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Діти" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Тип" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Видано" disabled></th>
                 </tr>
                 </thead>
                 <tbody class="reg-info-table-body">
                 <#list registrationInfos as registrationInfo>
                     <tr>
-                        <td>${registrationInfo.date}</td>
-                        <td>${registrationInfo.time}</td>
+                        <td class="info-id" style="display: none">${registrationInfo.id}</td>
+                        <td>${registrationInfo.receiveDate}</td>
+                        <td>${registrationInfo.stream}</td>
                         <td>${registrationInfo.phoneNumber}</td>
                         <td>${registrationInfo.surname}</td>
                         <td>${registrationInfo.name}</td>
                         <td>${registrationInfo.kidsCount}</td>
                         <td>${registrationInfo.typeSet}</td>
-                        <td>${registrationInfo.isReceive}</td>
+                        <td class='is-received-row' id=${registrationInfo.id}>
+                            <select disabled>
+                                <option selected>${registrationInfo.receive}</option>
+                                <option>Так</option>
+                                <option>Ні</option>
+                            </select>
+                        </td>
+                        <td><button class="btn btn-default reg-info-row"><span class="glyphicon glyphicon-edit"></span></button></td>
+                        <td><button class="btn btn-default reg-info-row-save" disabled><span class="glyphicon glyphicon-saved"></span></button></td>
                     </tr>
                 </#list>
                 </tbody>

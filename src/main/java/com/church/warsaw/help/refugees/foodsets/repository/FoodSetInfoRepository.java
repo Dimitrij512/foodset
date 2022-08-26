@@ -8,8 +8,4 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface FoodSetInfoRepository extends MongoRepository<FoodSetInfoEntity, String> {
 
   List<FoodSetInfoEntity> findAllByReceiveDate(LocalDate receiveDate);
-
-  List<FoodSetInfoEntity> findAllByReceiveDateAndReceiveTime(LocalDate date, String time);
-
-  List<FoodSetInfoEntity> findAllByReceiveDateIsGreaterThanEqual(LocalDate date);
 }

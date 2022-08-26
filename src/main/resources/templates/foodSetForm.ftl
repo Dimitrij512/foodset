@@ -141,7 +141,7 @@
 
 <script>
     $(document).ready(function(){
-        let date_input=$('input[name="date"]');
+        let date_input=$('input[name="receiveDate"]');
         let container=$('.bootstrap-iso').length>0 ? $('.bootstrap-iso').parent() : "body";
 
         let oneWeekFuture = new Date();
@@ -166,7 +166,7 @@
 
 <body>
 
-<form action="/register-food-set-form" method="post">
+<form action="/registration-infos" method="post">
 
     <h1>Реєстрація</h1>
 
@@ -174,10 +174,10 @@
         <legend><span class="number">1</span> Вибріть день</legend>
 
         <label for="date">День:</label>
-        <input class="form-control" id="date" name="date" placeholder="день-місяць-рік" type="text"/>
+        <input class="form-control" id="date" name="receiveDate" placeholder="день-місяць-рік" type="text"/>
 
-        <label for="time">Година:</label>
-        <select id="time" name="time">
+        <label for="time">Потік:</label>
+        <select id="time" name="stream">
                 <option value="14:00">14:00</option>
                 <option value="15:00">15:00</option>
         </select>

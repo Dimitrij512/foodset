@@ -1,8 +1,8 @@
 package com.church.warsaw.help.refugees.foodsets;
 
 public enum TypeSet {
-  FOOD_SET("продуктовий набір"),
-  COMPLEX_DINNER("комплексний обід");
+  FOOD_SET("пр. набір"),
+  COMPLEX_DINNER("ком. обід");
 
   private final String typeName;
 

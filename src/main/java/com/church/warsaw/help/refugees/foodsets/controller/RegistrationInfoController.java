@@ -11,18 +11,25 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @AllArgsConstructor
-public class FoodSetFormController {
+@Slf4j
+public class RegistrationInfoController {
 
   private final RegistrationInfoService registrationInfoService;
 
@@ -33,18 +40,25 @@ public class FoodSetFormController {
     return "foodSetForm";
   }
 
-  @PostMapping("/register-food-set-form")
-  public String registerForm(@ModelAttribute RegistrationInfo registrationInfo) {
+  @PostMapping("/registration-infos")
+  public String save(@ModelAttribute RegistrationInfo registrationInfo) {
     registrationInfoService.registerForm(registrationInfo);
 
     return "foodSetFormSuccess";
   }
 
-  @GetMapping("refugee/registration-infos")
+
+  @PutMapping("/registration-infos/{id}")
+  @ResponseStatus(value = HttpStatus.OK)
+  public void update(@PathVariable("id") String id, @RequestBody UpdateRegistrationInfoRequest request) {
+
+    registrationInfoService.updateForm(id, request);
+  }
+
+  @GetMapping("/registration-infos")
   public String getRegistrationInfos(@RequestParam(name = "receiveDate", required = false)
                                      @DateTimeFormat(pattern = "yyyy-mm-dd")
-                                     LocalDate receiveDate,
-                                     Model model) {
+                                     LocalDate receiveDate, Model model) {
 
     LocalDate date = receiveDate == null ? LocalDate.now() : receiveDate;
     List<RegistrationInfo> registrationInfos =
@@ -55,30 +69,38 @@ public class FoodSetFormController {
     return "registrationInfos";
   }
 
-  @GetMapping("refugee/registration-infos-content")
+  @GetMapping("/registration-infos-content")
   @ResponseBody
-  public List<RegistrationInfo> getRegistrationInfosContent(@RequestParam(name = "receiveDate", required = false)
-                                                            String receiveDate) {
+  public List<RegistrationInfo> getRegistrationInfosContent(
+      @RequestParam(name = "receiveDate", required = false)
+      String receiveDate) {
 
     LocalDate date = receiveDate == null ? LocalDate.now() : LocalDate.parse(receiveDate);
 
-    return registrationInfoService.getRegistrationInfoByDate(date);
+    List<RegistrationInfo> registrationInfoByDate =
+        registrationInfoService.getRegistrationInfoByDate(date);
+
+    log.info("Found registrations info with count={}", registrationInfoByDate.size());
+
+    return registrationInfoByDate;
   }
 
-  @GetMapping("refugee/registration-infos/generate-pdf-file")
+  @GetMapping("/registration-infos/generate-pdf-file")
   public void generatePdfFile(@RequestParam(name = "receiveDate", required = false)
-                              @DateTimeFormat(pattern = "yyyy-mm-dd")
-                              LocalDate receiveDate, HttpServletResponse response) throws IOException {
+                              String receiveDate,
+                              HttpServletResponse response) throws IOException {
 
-    LocalDate date = receiveDate == null ? LocalDate.now() : receiveDate;
-    List<RegistrationInfo> registrationInfos = registrationInfoService.getRegistrationInfoByDate(date);
+    LocalDate date = receiveDate == null ? LocalDate.now() : LocalDate.parse(receiveDate);
+    List<RegistrationInfo> registrationInfos =
+        registrationInfoService.getRegistrationInfoByDate(date);
 
     response.setContentType("application/pdf");
-    DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss");
 
     String currentDateTime = dateFormat.format(new Date());
 
-    response.setHeader("Content-Disposition", "attachment; filename=registrations-infos" + currentDateTime + ".pdf");
+    response.setHeader("Content-Disposition",
+        "attachment; filename=registrations-infos" + currentDateTime + ".pdf");
 
     pdfGeneratorService.generate(registrationInfos, response);
   }

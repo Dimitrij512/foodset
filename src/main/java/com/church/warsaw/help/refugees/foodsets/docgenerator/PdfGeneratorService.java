@@ -86,14 +86,14 @@ public class PdfGeneratorService {
       for (RegistrationInfo registrationInfo : registrationInfos) {
 
         table.addCell(String.valueOf(++count));
-        table.addCell(registrationInfo.getDate());
-        table.addCell(registrationInfo.getTime());
+        table.addCell(registrationInfo.getReceiveDate());
+        table.addCell(registrationInfo.getStream());
         table.addCell(registrationInfo.getPhoneNumber());
         table.addCell(registrationInfo.getSurname());
         table.addCell(registrationInfo.getName());
         table.addCell(String.valueOf(registrationInfo.getKidsCount()));
         table.addCell(registrationInfo.getTypeSet());
-        table.addCell(registrationInfo.getIsReceive());
+        table.addCell(registrationInfo.getReceive());
       }
       document.add(table);
     }

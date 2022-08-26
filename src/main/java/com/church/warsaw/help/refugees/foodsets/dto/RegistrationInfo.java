@@ -17,9 +17,11 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = PRIVATE)
 public class RegistrationInfo {
 
-  String date;
+  String id;
 
-  String time;
+  String receiveDate;
+
+  String stream;
 
   String name;
 
@@ -31,21 +33,9 @@ public class RegistrationInfo {
 
   String typeSet;
 
-  String isReceive;
+  @Builder.Default
+  String receive = "Ні";
 
-  public static RegistrationInfo of(Refugee refugee, FoodSetInfo foodSetInfo) {
-
-    return RegistrationInfo.builder()
-        .date(foodSetInfo.getReceiveDate().toString())
-        .time(foodSetInfo.getReceiveTime())
-        .name(refugee.getName())
-        .surname(refugee.getSurname())
-        .phoneNumber(refugee.getPhone())
-        .kidsCount(refugee.getKidsCount())
-        .typeSet(foodSetInfo.getTypeSet().getTypeName())
-        .isReceive(foodSetInfo.isReceive() ? "Так" : "Ні")
-        .build();
-  }
-
+  String comment;
 
 }

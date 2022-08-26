@@ -28,14 +28,4 @@ public class FoodSetInfo {
   TypeSet typeSet;
 
   boolean isReceive;
-
-  public static FoodSetInfo of(String refugeeId, RegistrationInfo registrationInfo) {
-
-    return FoodSetInfo.builder()
-        .refugeeId(refugeeId)
-        .receiveDate(LocalDate.parse(registrationInfo.getDate()))
-        .receiveTime(registrationInfo.getTime())
-        .typeSet(TypeSet.valueOf(registrationInfo.getTypeSet()))
-        .build();
-  }
 }
