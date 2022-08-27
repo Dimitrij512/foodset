@@ -1,0 +1,15 @@
+spring:
+  main:
+    banner-mode: OFF
+  freemarker:
+    template-loader-path: "classpath:/templates"
+    suffix: ".ftl"
+  mvc:
+    static-path-pattern: "/static/**"
+  jpa:
+    open-in-view: false
+
+  data:
+    mongodb:
+      uri: "${MONGO_DB_URI:}"
+      database: "${MONGO_DB_DATABASE:}"

@@ -156,10 +156,6 @@
             startDate: new Date(),
             endDate: oneWeekFuture,
             daysOfWeekDisabled:[5,6,0],
-
-            // onSelect: function (date) {
-            //     $('#selectName').val(date).attr('readonly', true); // if you want to make event fire after the date selection
-            // }
         })
     })
 </script>
@@ -170,14 +166,23 @@
 
     <h1>Реєстрація</h1>
 
+    <#if error??>
+        <div>
+            <h5 class="text-danger">Помилка введення даних: </h5>
+            <pre class="text-danger">${error}</pre>
+        </div>
+    </#if>
+
     <fieldset>
         <legend><span class="number">1</span> Вибріть день</legend>
 
         <label for="date">День:</label>
-        <input class="form-control" id="date" name="receiveDate" placeholder="день-місяць-рік" type="text"/>
+        <input class="form-control" id="date" name="receiveDate" placeholder="дд-мм-рр" type="text"
+               value="<#if registrationInfo??>${registrationInfo.receiveDate}<#else></#if>"/>
 
-        <label for="time">Потік:</label>
+        <label for="time">Година:</label>
         <select id="time" name="stream">
+                <option selected value="<#if registrationInfo??>${registrationInfo.stream}<#else></#if>"/>14:00</option>
                 <option value="14:00">14:00</option>
                 <option value="15:00">15:00</option>
         </select>
@@ -187,20 +192,20 @@
         <legend><span class="number">2</span> Ваші дані</legend>
 
         <label for="name">Ім'я:</label>
-        <input type="text" id="name" name="name">
+        <input type="text" id="name" name="name" value="<#if registrationInfo??>${registrationInfo.name}<#else></#if>">
 
         <label for="surname">Прізвище:</label>
-        <input type="text" id="surname" name="surname">
+        <input type="text" id="surname" name="surname" value="<#if registrationInfo??>${registrationInfo.surname}<#else></#if>">
 
         <label for="phone_number">Номер телефону:</label>
-        <input type="text" id="phone_number" name="phoneNumber">
+        <input type="text" id="phone_number" name="phoneNumber" value="<#if registrationInfo??>${registrationInfo.phoneNumber}<#else></#if>">
 
         <label for="kids_count">Кількість дітей в сім'ї:</label>
         <select id="kids_count" name="kidsCount">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
-            <option value="4">3</option>
+            <option value="4">4</option>
             <option value="5">5</option>
             <option value="6">6</option>
             <option value="7">7</option>

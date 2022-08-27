@@ -3,6 +3,8 @@ package com.church.warsaw.help.refugees.foodsets.controller;
 import com.church.warsaw.help.refugees.foodsets.docgenerator.PdfGeneratorService;
 import com.church.warsaw.help.refugees.foodsets.dto.RegistrationInfo;
 import com.church.warsaw.help.refugees.foodsets.service.RegistrationInfoService;
+import com.church.warsaw.help.refugees.foodsets.validator.DataValidator;
+import com.church.warsaw.help.refugees.foodsets.validator.ValidationResult;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,11 +27,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @AllArgsConstructor
 @Slf4j
 public class RegistrationInfoController {
+
+  private final DataValidator dataValidator;
 
   private final RegistrationInfoService registrationInfoService;
 
@@ -37,11 +42,26 @@ public class RegistrationInfoController {
 
   @GetMapping("/food-set-form")
   public String foodSetFormPage() {
+
+
     return "foodSetForm";
   }
 
   @PostMapping("/registration-infos")
-  public String save(@ModelAttribute RegistrationInfo registrationInfo) {
+  public String save(@ModelAttribute RegistrationInfo registrationInfo,
+                     Model model,
+                     RedirectAttributes rm) {
+
+
+    ValidationResult validationResult = dataValidator.validate(registrationInfo);
+
+    if (validationResult.isError()) {
+      rm.addFlashAttribute("error", validationResult.getErrorMessage());
+      rm.addFlashAttribute("registrationInfo", registrationInfo);
+
+      return "redirect:/food-set-form";
+    }
+
     registrationInfoService.registerForm(registrationInfo);
 
     return "foodSetFormSuccess";

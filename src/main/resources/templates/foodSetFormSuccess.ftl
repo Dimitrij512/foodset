@@ -45,8 +45,8 @@
     <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
         <i class="checkmark">✓</i>
     </div>
-    <h1>Success</h1>
-    <p>Ми отримали Вашу заявку;<br/> ми з вами зв'яжемось!</p>
+    <h1>Вітаємо!</h1>
+    <p>Ми отримали Вашу заявку<br/> ми з вами зв'яжемось!</p>
 </div>
 </body>
 </html>
