@@ -27,7 +27,7 @@ public class RegistrationInfo {
   @CheckDateFormat(pattern = "yyyy-mm-dd", message = "не вірна дата")
   String receiveDate;
 
-  @Pattern(regexp = "^(0?[1-9]|1[0-9]):[0-5][0-9]$", message = "не вірний формат потоку")
+  @Pattern(regexp = "^(0?[1-9]|1[0-9])-[0-5][0-9]$", message = "не вірний формат потоку")
   String stream;
 
   @NotBlank(message = "ім'я не може бути пустим")

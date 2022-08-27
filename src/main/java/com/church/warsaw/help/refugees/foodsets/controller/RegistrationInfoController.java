@@ -9,11 +9,13 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -103,6 +105,18 @@ public class RegistrationInfoController {
     log.info("Found registrations info with count={}", registrationInfoByDate.size());
 
     return registrationInfoByDate;
+  }
+
+  @GetMapping("/registration-infos/stream-of-delivery")
+  @ResponseBody
+  public List<String> getStreamOfDelivery(@RequestParam(name = "receiveDate", required = false)
+                                          String receiveDate) {
+
+    if (StringUtils.isBlank(receiveDate)) {
+      return Collections.emptyList();
+    }
+
+    return registrationInfoService.getAvailableStreamsByDate(LocalDate.parse(receiveDate));
   }
 
   @GetMapping("/registration-infos/generate-pdf-file")

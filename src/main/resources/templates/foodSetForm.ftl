@@ -157,17 +157,42 @@
             endDate: oneWeekFuture,
             daysOfWeekDisabled:[5,6,0],
         })
+
+        $('#date').datepicker().on("changeDate", function() {
+            let selectedDate = $('#date').val();
+            $.get("/registration-infos/stream-of-delivery/?receiveDate=" + selectedDate, function (response) {
+
+                if(!$.trim(response)) {
+                    $('#registration-closed').removeAttr('hidden');
+                    $('#stream-of-delivery').attr("hidden",true);
+                    $('#user-info').attr("hidden",true);
+
+                } else {
+                    response.forEach(function(streamOfDelivery) {
+                        $("#time").append($('<option>', {value: streamOfDelivery, text: streamOfDelivery}));
+                    })
+                    $('#registration-closed').attr("hidden",true);
+                    $('#stream-of-delivery').removeAttr('hidden');
+                    $('#user-info').removeAttr('hidden');
+                }
+            });
+        });
+
+        $('#submit-registration-form').submit(function() {
+            $('#registration-closed').attr("hidden",true);
+            $('#error-notification').attr("hidden",true);
+        });
     })
 </script>
 
 <body>
 
-<form action="/registration-infos" method="post">
+<form id="submit-registration-form" action="/registration-infos" method="post">
 
     <h1>Реєстрація</h1>
 
     <#if error??>
-        <div>
+        <div id="error-notification">
             <h5 class="text-danger">Помилка введення даних: </h5>
             <pre class="text-danger">${error}</pre>
         </div>
@@ -179,15 +204,20 @@
         <label for="date">День:</label>
         <input class="form-control" id="date" name="receiveDate" placeholder="дд-мм-рр" type="text"
                value="<#if registrationInfo??>${registrationInfo.receiveDate}<#else></#if>"/>
-
+    <div id="stream-of-delivery" hidden>
         <label for="time">Година:</label>
         <select id="time" name="stream">
-                <option selected value="<#if registrationInfo??>${registrationInfo.stream}<#else></#if>"/>14:00</option>
-                <option value="14:00">14:00</option>
-                <option value="15:00">15:00</option>
+                <option selected value="<#if registrationInfo??>${registrationInfo.stream}<#else></#if>"/></option>
         </select>
+    </div>
+    <div id="registration-closed" hidden>
+        <div>
+            <h5 class="text-danger">На дану дату реєстрація закрита </h5>
+        </div>
+    </div>
     </fieldset>
 
+    <div id="user-info" hidden>
     <fieldset>
         <legend><span class="number">2</span> Ваші дані</legend>
 
@@ -217,6 +247,8 @@
     </fieldset>
 
     <button type="submit">Надіслати</button>
+
+    </div>
 </form>
 
 </body>
