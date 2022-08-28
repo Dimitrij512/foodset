@@ -44,30 +44,34 @@
         text-align: center;
     }
 
-    input[type="text"],
-    input[type="password"],
-    input[type="date"],
-    input[type="datetime"],
-    input[type="email"],
-    input[type="number"],
-    input[type="search"],
-    input[type="tel"],
-    input[type="time"],
-    input[type="url"],
+    input,
     textarea,
     select {
-        background: rgba(255, 255, 255, 0.1);
-        border: none;
-        font-size: 16px;
+        border: 2px solid transparent;
         height: auto;
-        margin: 0;
         outline: 0;
-        padding: 15px;
+        padding: 5px 10px;
+        font-size: 14px;
+        font-weight: 400;
         width: 100%;
         background-color: #e8eeef;
         color: #8a97a0;
-        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
-        margin-bottom: 30px;
+        margin: 0 0 15px;
+        /*border-radius: 4px 4px 0 0;*/
+        border-radius: 4px;
+        transition: 300ms all ease;
+    }
+
+    input:focus, input:active, input:hover,
+    textarea:focus, textarea:active, textarea:hover,
+    select:focus, select:active, select:hover {
+        border-color: #ccd9db;
+    }
+
+    input:focus, input:active,
+    textarea:focus, textarea:active,
+    select:focus, select:active {
+        box-shadow: 0 0 0 3px rgba(204, 217, 219, 0.5);
     }
 
     input[type="radio"],
@@ -77,23 +81,33 @@
 
     select {
         padding: 6px;
-        height: 32px;
-        border-radius: 2px;
+        height: 31px;
+        cursor: pointer;
     }
 
     button {
-        padding: 19px 39px 18px 39px;
+        padding: 4px 10px;
         color: #FFF;
-        background-color: #4bc970;
-        font-size: 18px;
+        background-color: #3ac162;
+        font-size: 16px;
         text-align: center;
         font-style: normal;
-        border-radius: 5px;
+        border-radius: 4px;
         width: 100%;
-        border: 1px solid #3ac162;
-        border-width: 1px 1px 3px;
-        box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) inset;
+        box-sizing: border-box;
+        border: 2px solid #3ac162;
         margin-bottom: 10px;
+        transition: 300ms all ease;
+    }
+
+    button:hover, button:focus, button:active {
+        background-color: transparent;
+        color: #3ac162;
+    }
+
+    button:focus, button:active {
+        box-shadow: 0 0 0 3px rgba(58, 193, 98, 0.5);
+        outline: none;
     }
 
     fieldset {
@@ -102,18 +116,64 @@
     }
 
     legend {
-        font-size: 1.4em;
-        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        font-size: 23px;
+        margin-bottom: 20px;
     }
 
     label {
         display: block;
-        margin-bottom: 8px;
+        margin-bottom: 5px;
+        font-size: 16px;
     }
 
     label.light {
-        font-weight: 300;
-        display: inline;
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    label.light input {
+        opacity: 0;
+        position: absolute;
+        top: -1000%;
+        left: -1000%;
+        width: 0;
+        height: 0;
+    }
+
+    label.light .checkbox-container {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #ccd9db;
+        display: flex;
+        position: relative;
+        margin-right: 10px;
+        box-sizing: border-box;
+        transition: 300ms all ease;
+    }
+
+    label.light .checkbox-container:after {
+        position: absolute;
+        content: '';
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        height: 10px;
+        width: 10px;
+        background: #94b0b5;
+        border-radius: 50%;
+        transition: 300ms all ease;
+    }
+
+    label.light input:checked + .checkbox-container:after {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    label.light input:focus + .checkbox-container, label.light input:active + .checkbox-container {
+        box-shadow: 0 0 0 3px rgba(204, 217, 219, 0.5);
     }
 
     .number {
@@ -121,13 +181,13 @@
         color: #fff;
         height: 30px;
         width: 30px;
-        display: inline-block;
-        font-size: 0.8em;
-        margin-right: 4px;
-        line-height: 30px;
-        text-align: center;
-        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
-        border-radius: 100%;
+        font-size: 20px;
+        line-height: 1.25;
+        border-radius: 50%;
+        margin-right: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     @media screen and (min-width: 480px) {
@@ -201,7 +261,7 @@
         <legend><span class="number">1</span> Вибріть день</legend>
 
         <label for="date">День:</label>
-        <input class="form-control" id="date" name="receiveDate" placeholder="дд-мм-рр" type="text"
+        <input id="date" name="receiveDate" placeholder="дд-мм-рр" type="text"
                value="<#if registrationInfo??>${registrationInfo.receiveDate}<#else></#if>"/>
     <div id="stream-of-delivery" hidden>
         <label for="time">Година:</label>
@@ -241,8 +301,16 @@
         </select>
 
         <label>Тип набору:</label>
-        <input type="radio" id="food_set" value="FOOD_SET" name="typeSet"><label for="food_set" class="light">Продуктовий набір</label><br>
-        <input type="radio" id="complex_dinner" value="COMPLEX_DINNER" name="typeSet"><label for="complex_dinner" class="light">Комплексний обід</label>
+        <label for="food_set" class="light">
+            <input type="radio" id="food_set" value="FOOD_SET" name="typeSet">
+            <div class="checkbox-container"></div>
+            Продуктовий набір
+        </label>
+        <label for="complex_dinner" class="light">
+            <input type="radio" id="complex_dinner" value="COMPLEX_DINNER" name="typeSet">
+            <div class="checkbox-container"></div>
+            Комплексний обід
+        </label>
     </fieldset>
 <#--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
     <button type="submit">Надіслати</button>
