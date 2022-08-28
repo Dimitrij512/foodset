@@ -39,7 +39,7 @@ public class RegistrationInfoService {
             registrationInfo.getSurname())
         .stream().max((e1, e2) -> e2.getReceiveDate().compareTo(e1.getReceiveDate()));
 
-    if(latestRegistrationInfo.isEmpty()
+    if((!latestRegistrationInfo.isPresent())
         || isLatestReceivedDateLessThanTwoWeeks(latestRegistrationInfo.get().getReceiveDate())) {
 
       RegistrationInfoEntity regInfo =
@@ -61,7 +61,7 @@ public class RegistrationInfoService {
     if(!repository.existsById(id)) {
       throw new IllegalArgumentException(format("Not found registrationInfo by id=%s", id));
     }
-    RegistrationInfoEntity entityById = repository.findById(id).orElseThrow();
+    RegistrationInfoEntity entityById = repository.findById(id).get();
     entityById.setReceive(getReceived(request.getReceived()));
     entityById.setComment(request.getComment());
 
