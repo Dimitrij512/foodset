@@ -147,7 +147,6 @@
         let oneWeekFuture = new Date();
         oneWeekFuture.setDate(oneWeekFuture.getDate() + 7);
 
-
         date_input.datepicker({
             format: 'yyyy-mm-dd',
             container: container,
@@ -187,13 +186,13 @@
 
 <body>
 
-<form id="submit-registration-form" action="/registration-infos" method="post">
+<form id="submit-registration-form" action="/registration-infos/create" method="post">
 
     <h1>Реєстрація</h1>
 
     <#if error??>
         <div id="error-notification">
-            <h5 class="text-danger">Помилка введення даних: </h5>
+            <h5 class="text-danger">Помилка реєстрації: </h5>
             <pre class="text-danger">${error}</pre>
         </div>
     </#if>
@@ -221,11 +220,11 @@
     <fieldset>
         <legend><span class="number">2</span> Ваші дані</legend>
 
-        <label for="name">Ім'я:</label>
-        <input type="text" id="name" name="name" value="<#if registrationInfo??>${registrationInfo.name}<#else></#if>">
-
         <label for="surname">Прізвище:</label>
         <input type="text" id="surname" name="surname" value="<#if registrationInfo??>${registrationInfo.surname}<#else></#if>">
+
+        <label for="name">Ім'я:</label>
+        <input type="text" id="name" name="name" value="<#if registrationInfo??>${registrationInfo.name}<#else></#if>">
 
         <label for="phone_number">Номер телефону:</label>
         <input type="text" id="phone_number" name="phoneNumber" value="<#if registrationInfo??>${registrationInfo.phoneNumber}<#else></#if>">
@@ -245,7 +244,7 @@
         <input type="radio" id="food_set" value="FOOD_SET" name="typeSet"><label for="food_set" class="light">Продуктовий набір</label><br>
         <input type="radio" id="complex_dinner" value="COMPLEX_DINNER" name="typeSet"><label for="complex_dinner" class="light">Комплексний обід</label>
     </fieldset>
-
+<#--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
     <button type="submit">Надіслати</button>
 
     </div>

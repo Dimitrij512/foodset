@@ -17,5 +17,10 @@ spring:
 
 food-set-form:
   map-streams-with-max-count:
-    "14-00": 2
-    "15-00": 2
+    "14-00": 10
+    "15-00": 10
+
+admin-user:
+  username: "${USER_NAME:}"
+  password: "${USER_PASSWORD:}"
+  role: "ROLE_ADMIN"

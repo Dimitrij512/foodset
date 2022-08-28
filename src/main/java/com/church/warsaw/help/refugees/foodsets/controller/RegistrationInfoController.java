@@ -1,5 +1,7 @@
 package com.church.warsaw.help.refugees.foodsets.controller;
 
+import static com.church.warsaw.help.refugees.foodsets.service.RegistrationInfoService.HAS_ERROR_KEY;
+
 import com.church.warsaw.help.refugees.foodsets.docgenerator.PdfGeneratorService;
 import com.church.warsaw.help.refugees.foodsets.dto.RegistrationInfo;
 import com.church.warsaw.help.refugees.foodsets.service.RegistrationInfoService;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -49,11 +52,13 @@ public class RegistrationInfoController {
     return "foodSetForm";
   }
 
-  @PostMapping("/registration-infos")
-  public String save(@ModelAttribute RegistrationInfo registrationInfo,
-                     Model model,
-                     RedirectAttributes rm) {
+  @GetMapping("/food-set-form/success")
+  public String foodSetFormSuccessPage() {
+    return "foodSetFormSuccess";
+  }
 
+  @PostMapping("/registration-infos/create")
+  public String save(@ModelAttribute RegistrationInfo registrationInfo, RedirectAttributes rm) {
 
     ValidationResult validationResult = dataValidator.validate(registrationInfo);
 
@@ -64,11 +69,17 @@ public class RegistrationInfoController {
       return "redirect:/food-set-form";
     }
 
-    registrationInfoService.registerForm(registrationInfo);
+    Pair<String, String> registrationResult =
+        registrationInfoService.registerForm(registrationInfo);
 
-    return "foodSetFormSuccess";
+    if (HAS_ERROR_KEY.equals(registrationResult.getLeft())) {
+      rm.addFlashAttribute("error", registrationResult.getRight());
+      rm.addFlashAttribute("registrationInfo", registrationInfo);
+      return "redirect:/food-set-form";
+    }
+
+    return "redirect:/food-set-form/success";
   }
-
 
   @PutMapping("/registration-infos/{id}")
   @ResponseStatus(value = HttpStatus.OK)

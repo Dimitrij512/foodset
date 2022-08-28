@@ -3,7 +3,7 @@ package com.church.warsaw.help.refugees.foodsets.mapper;
 import com.church.warsaw.help.refugees.foodsets.TypeSet;
 import com.church.warsaw.help.refugees.foodsets.dto.RegistrationInfo;
 import com.church.warsaw.help.refugees.foodsets.entity.RegistrationInfoEntity;
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

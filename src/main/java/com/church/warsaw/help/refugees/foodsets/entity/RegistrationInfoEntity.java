@@ -1,9 +1,9 @@
 package com.church.warsaw.help.refugees.foodsets.entity;
 
 import com.church.warsaw.help.refugees.foodsets.TypeSet;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
-import org.joda.time.LocalDate;
 
 @Getter
 @Setter

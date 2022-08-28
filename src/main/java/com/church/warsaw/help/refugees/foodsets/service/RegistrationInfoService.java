@@ -11,10 +11,12 @@ import com.church.warsaw.help.refugees.foodsets.repository.RegistrationInfoRepos
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,17 +25,34 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RegistrationInfoService {
 
+  public static final String HAS_ERROR_KEY = "hasErrorKey";
+
   private final FoodSetConfiguration foodSetConfiguration;
 
    private final RegistrationInfoRepository repository;
 
   @Transactional
-  public void registerForm(RegistrationInfo registrationInfo) {
+  public Pair<String, String> registerForm(RegistrationInfo registrationInfo) {
 
-    RegistrationInfoEntity regInfo =
-        repository.save(RegistrationInfoMapper.INSTANCE.toEntity(registrationInfo));
+    Optional<RegistrationInfoEntity> latestRegistrationInfo = repository.
+        findAllByPhoneNumberAndSurname(registrationInfo.getPhoneNumber(),
+            registrationInfo.getSurname())
+        .stream().max((e1, e2) -> e2.getReceiveDate().compareTo(e1.getReceiveDate()));
 
-    log.info("Registered form by id={}", regInfo.getId());
+    if(latestRegistrationInfo.isEmpty()
+        || isLatestReceivedDateLessThanTwoWeeks(latestRegistrationInfo.get().getReceiveDate())) {
+
+      RegistrationInfoEntity regInfo =
+          repository.save(RegistrationInfoMapper.INSTANCE.toEntity(registrationInfo));
+      log.info("Registered form by id={}", regInfo.getId());
+
+      return Pair.of(regInfo.getId(), null);
+    }
+
+    return Pair.of(HAS_ERROR_KEY,
+        format("Перевищена кількікість реєстрацій. " +
+                "Орієнтована дата наступної реєстрації %s",
+            latestRegistrationInfo.get().getReceiveDate().plusWeeks(2)));
   }
 
   @Transactional
@@ -42,7 +61,7 @@ public class RegistrationInfoService {
     if(!repository.existsById(id)) {
       throw new IllegalArgumentException(format("Not found registrationInfo by id=%s", id));
     }
-    RegistrationInfoEntity entityById = repository.findById(id).get();
+    RegistrationInfoEntity entityById = repository.findById(id).orElseThrow();
     entityById.setReceive(getReceived(request.getReceived()));
     entityById.setComment(request.getComment());
 
@@ -86,6 +105,13 @@ public class RegistrationInfoService {
 
   public boolean getReceived(String receiveString) {
     return "Так".equals(receiveString);
+  }
+
+  public static boolean isLatestReceivedDateLessThanTwoWeeks(LocalDate latestReceivedDate) {
+    LocalDate weeksFromLatestReceivedDate = latestReceivedDate.plusWeeks(2);
+    LocalDate today = LocalDate.now();
+
+    return today.isEqual(weeksFromLatestReceivedDate) || today.isAfter(weeksFromLatestReceivedDate);
   }
 
 }
