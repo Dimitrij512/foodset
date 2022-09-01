@@ -214,10 +214,11 @@
             autoclose: true,
             startDate: new Date(),
             endDate: oneWeekFuture,
-            daysOfWeekDisabled:[5,6,0],
+            daysOfWeekDisabled:[6,0],
         })
 
         $('#date').datepicker().on("changeDate", function() {
+            console.log("changeDate")
             let selectedDate = $('#date').val();
             $.get("/registration-infos/stream-of-delivery/?receiveDate=" + selectedDate, function (response) {
 
@@ -227,6 +228,7 @@
                     $('#user-info').attr("hidden",true);
 
                 } else {
+                    $("#time").empty()
                     response.forEach(function(streamOfDelivery) {
                         $("#time").append($('<option>', {value: streamOfDelivery, text: streamOfDelivery}));
                     })
@@ -242,6 +244,15 @@
             $('#error-notification').attr("hidden",true);
         });
     })
+
+    function phoneFormat(input) {
+        input = input.replace(/\D/g,'');
+        let size = input.length;
+        if (size>3) {input=input.slice(0,3)+" "+input.slice(3,12)}
+        if (size>6) {input=input.slice(0,7)+" " +input.slice(7)}
+
+        return input;
+    }
 </script>
 
 <body>
@@ -286,10 +297,17 @@
         <label for="name">Ім'я:</label>
         <input type="text" id="name" name="name" value="<#if registrationInfo??>${registrationInfo.name}<#else></#if>">
 
-        <label for="phone_number">Номер телефону:</label>
-        <input type="text" id="phone_number" name="phoneNumber" value="<#if registrationInfo??>${registrationInfo.phoneNumber}<#else></#if>">
+        <label for="phone_number">Телефон +48:</label>
 
-        <label for="kids_count">Кількість дітей в сім'ї:</label>
+        <input type="text" id="phone_number" name="phoneNumber" placeholder="телефон Польща" oninput="this.value=phoneFormat(this.value)" value="<#if registrationInfo??>${registrationInfo.phoneNumber}<#else></#if>">
+
+        <label for="phone_number_messenger">Телефон +:</label>
+        <input type="text" id="phone_number_messenger" name="phoneNumberMessenger" placeholder="телефон Viber, Whatsapp, Messenger, Telegram..." oninput="this.value=phoneFormat(this.value)" value="<#if registrationInfo??>${registrationInfo.phoneNumberMessenger}<#else></#if>">
+
+        <label for="email">електронна пошта:</label>
+        <input type="email" id="email" name="email" placeholder="ваша електронна пошта" value="<#if registrationInfo??>${registrationInfo.email}<#else></#if>">
+
+        <label for="kids_count">Кількість членів сім'ї:</label>
         <select id="kids_count" name="kidsCount">
             <option value="1">1</option>
             <option value="2">2</option>
@@ -312,7 +330,6 @@
             Комплексний обід
         </label>
     </fieldset>
-<#--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
     <button type="submit">Надіслати</button>
 
     </div>

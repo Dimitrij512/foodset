@@ -22,6 +22,10 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = PRIVATE)
 public class RegistrationInfo {
 
+  private final String PHONE_DIGITS_AND_SPACES_REGEX = "([ ]*+[0-9]++[ ]*+)+";
+  private final String EMAIL_REGEX = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+      + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+
   String id;
 
   @CheckDateFormat(pattern = "yyyy-mm-dd", message = "не вірна дата")
@@ -36,8 +40,14 @@ public class RegistrationInfo {
   @NotBlank(message = "фамілія не може бути пустим")
   String surname;
 
-  @Pattern(regexp = "^\\d{8,13}$", message = "телефон вказано не вірно")
+  @Pattern(regexp = PHONE_DIGITS_AND_SPACES_REGEX, message = "телефон вказано не вірно")
   String phoneNumber;
+
+  @Pattern(regexp = PHONE_DIGITS_AND_SPACES_REGEX, message = "телефон месенджера вказано не вірно")
+  String phoneNumberMessenger;
+
+  @Pattern(regexp = EMAIL_REGEX, message = "email вказано не вірно")
+  String email;
 
   @Min(value = 0, message = "кількість дітей не може бути менше нуля")
   @Max(value = 10, message = "кількість дітей не може бути більше 10")

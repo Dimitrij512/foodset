@@ -19,6 +19,10 @@ public class RegistrationInfoEntity extends BaseEntity {
 
   String phoneNumber;
 
+  String phoneNumberMessenger;
+
+  String email;
+
   int kidsCount;
 
   TypeSet typeSet;

@@ -35,16 +35,17 @@ public class RegistrationInfoService {
   public Pair<String, String> registerForm(RegistrationInfo registrationInfo) {
 
     Optional<RegistrationInfoEntity> latestRegistrationInfo = repository.
-        findAllByPhoneNumberAndSurname(registrationInfo.getPhoneNumber(),
-            registrationInfo.getSurname())
+        findAllBySurnameAndName(registrationInfo.getSurname(), registrationInfo.getName())
         .stream().max((e1, e2) -> e2.getReceiveDate().compareTo(e1.getReceiveDate()));
 
     if((!latestRegistrationInfo.isPresent())
-        || isLatestReceivedDateLessThanTwoWeeks(latestRegistrationInfo.get().getReceiveDate())) {
+        || isLatestReceivedDateBiggerThanTwoWeeks(latestRegistrationInfo.get().getReceiveDate())) {
 
       RegistrationInfoEntity regInfo =
           repository.save(RegistrationInfoMapper.INSTANCE.toEntity(registrationInfo));
       log.info("Registered form by id={}", regInfo.getId());
+
+      //todo send registration form
 
       return Pair.of(regInfo.getId(), null);
     }
@@ -107,7 +108,7 @@ public class RegistrationInfoService {
     return "Так".equals(receiveString);
   }
 
-  public static boolean isLatestReceivedDateLessThanTwoWeeks(LocalDate latestReceivedDate) {
+  public static boolean isLatestReceivedDateBiggerThanTwoWeeks(LocalDate latestReceivedDate) {
     LocalDate weeksFromLatestReceivedDate = latestReceivedDate.plusWeeks(2);
     LocalDate today = LocalDate.now();
 

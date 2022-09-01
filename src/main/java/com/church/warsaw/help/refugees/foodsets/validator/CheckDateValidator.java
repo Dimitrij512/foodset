@@ -1,6 +1,7 @@
 package com.church.warsaw.help.refugees.foodsets.validator;
 
-import org.joda.time.LocalDate;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -21,11 +22,22 @@ public class CheckDateValidator implements ConstraintValidator<CheckDateFormat, 
 
     try {
       LocalDate localDate = LocalDate.parse(object);
-      return localDate.isAfter(LocalDate.now());
+
+      LocalDate daysInFuture = LocalDate.now().plusDays(7);
+      return localDate.isAfter(LocalDate.now())
+          && localDate.isBefore(daysInFuture)
+          && isWorkDay(localDate);
 
     } catch (Exception e) {
       e.printStackTrace();
       return false;
     }
+  }
+
+  public static boolean isWorkDay(LocalDate day)
+  {
+    DayOfWeek dayOfWeek = day.getDayOfWeek();
+
+    return !DayOfWeek.SATURDAY.equals(dayOfWeek) && !DayOfWeek.SUNDAY.equals(dayOfWeek);
   }
 }

@@ -1,5 +1,7 @@
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
 </head>
 <style>
@@ -47,6 +49,10 @@
     </div>
     <h1>Вітаємо!</h1>
     <p>Ми отримали Вашу заявку<br/> ми з вами зв'яжемось!</p>
+    <div>
+        <button type="button" href="/food-set-form" class="btn btn-primary btn-lg btn-block">Повернутися до реєстрації
+        </button>
+    </div>
 </div>
 </body>
 </html>
