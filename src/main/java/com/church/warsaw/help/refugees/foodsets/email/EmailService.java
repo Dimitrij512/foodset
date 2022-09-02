@@ -39,10 +39,10 @@ public class EmailService {
     mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(mail));
     mimeMessage.setSubject("Допомога iCareUkraine");
 
-    String textMessage = format("Вас вітає цент допомоги біженцям %s! \n"
+    String textMessage = format("Вас вітає центр допомоги біженцям %s! \n"
             + "Дякуємо за Вашу довіру, чекаємо Вас на зустрічі за адерсою: %s, перший під'їзд, \n"
-            + "другий поверх, на обрану вами дату та час (%s %s) \n"
-            + "Хай бог благословить Вас!\n"
+            + "другий поверх, на обрану вами дату та час (%s, %s) \n"
+            + "Хай Бог благословить Вас!\n"
             + "Запрошуємо Вас відвідати наші інформаційні ресурси: \n"
             + "https://icareukraine.pl/\n"
             + "https://www.baptist.pl/\n"
