@@ -48,7 +48,7 @@
         <i class="checkmark">✓</i>
     </div>
     <h1>Вітаємо!</h1>
-    <p>Ми отримали Вашу заявку<br/> ми з вами зв'яжемось!</p>
+    <p>Ми отримали Вашу заявку<br/> Перевірте будь ласка @пошту яку ви вказали при реєстрації</p>
     <div>
         <a href="/food-set-form" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Повернутися до
             реєстрації</a>
