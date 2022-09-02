@@ -36,7 +36,7 @@ public class EmailService {
   @SneakyThrows
   private MimeMessage getMessagePreparator(String mail, String date, String time) {
 
-    mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(mail));
+    mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(mail));
     mimeMessage.setSubject("Допомога iCareUkraine");
 
     String textMessage = format("Вас вітає цент допомоги біженцям %s! \n"
