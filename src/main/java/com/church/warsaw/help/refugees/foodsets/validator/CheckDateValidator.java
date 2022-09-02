@@ -23,7 +23,7 @@ public class CheckDateValidator implements ConstraintValidator<CheckDateFormat, 
     try {
       LocalDate localDate = LocalDate.parse(object);
 
-      LocalDate daysInFuture = LocalDate.now().plusDays(7);
+      LocalDate daysInFuture = LocalDate.now().plusDays(8);
       return localDate.isAfter(LocalDate.now())
           && localDate.isBefore(daysInFuture)
           && isWorkDay(localDate);
