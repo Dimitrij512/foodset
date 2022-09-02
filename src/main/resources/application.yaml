@@ -17,10 +17,20 @@ spring:
 
 food-set-form:
   map-streams-with-max-count:
-    "14-00": 10
-    "15-00": 10
+    "11-00": 75
+    "14-00": 75
 
 admin-user:
   username: "${USER_NAME:}"
   password: "${USER_PASSWORD:}"
   role: "ROLE_ADMIN"
+
+company:
+  name: "iCareUkraine"
+  address: "Walicòw 25"
+
+email:
+  host: "${EMAIL_HOST:}"
+  port: "${EMAIL_PORT:}"
+  username: "${EMAIL_USERNAME:}"
+  password: "${EMAIL_PASSWORD:}"

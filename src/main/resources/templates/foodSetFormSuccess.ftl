@@ -50,7 +50,8 @@
     <h1>Вітаємо!</h1>
     <p>Ми отримали Вашу заявку<br/> ми з вами зв'яжемось!</p>
     <div>
-        <button type="button" href="/food-set-form" class="btn btn-primary btn-lg btn-block">Повернутися до реєстрації
+        <a href="/food-set-form" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Повернутися до
+            реєстрації</a>
         </button>
     </div>
 </div>

@@ -5,6 +5,7 @@ import static java.lang.String.format;
 import com.church.warsaw.help.refugees.foodsets.config.FoodSetConfiguration;
 import com.church.warsaw.help.refugees.foodsets.controller.UpdateRegistrationInfoRequest;
 import com.church.warsaw.help.refugees.foodsets.dto.RegistrationInfo;
+import com.church.warsaw.help.refugees.foodsets.email.EmailService;
 import com.church.warsaw.help.refugees.foodsets.entity.RegistrationInfoEntity;
 import com.church.warsaw.help.refugees.foodsets.mapper.RegistrationInfoMapper;
 import com.church.warsaw.help.refugees.foodsets.repository.RegistrationInfoRepository;
@@ -27,6 +28,8 @@ public class RegistrationInfoService {
 
   public static final String HAS_ERROR_KEY = "hasErrorKey";
 
+  private final EmailService emailService;
+
   private final FoodSetConfiguration foodSetConfiguration;
 
    private final RegistrationInfoRepository repository;
@@ -45,7 +48,9 @@ public class RegistrationInfoService {
           repository.save(RegistrationInfoMapper.INSTANCE.toEntity(registrationInfo));
       log.info("Registered form by id={}", regInfo.getId());
 
-      //todo send registration form
+      emailService.sendMail(registrationInfo.getEmail(),
+          registrationInfo.getReceiveDate(),
+          registrationInfo.getStream());
 
       return Pair.of(regInfo.getId(), null);
     }
