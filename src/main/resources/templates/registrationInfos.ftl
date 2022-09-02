@@ -95,7 +95,6 @@
                 response.forEach(function(refugeesInfo) {
                    let html =
                         '<tr>'
-                        + '<td class="info-id" style="display: none">' + refugeesInfo.id + '</td>'
                         + '<td>' + refugeesInfo.receiveDate + '</td>'
                         + '<td>' + refugeesInfo.stream + '</td>'
                         + '<td>' + refugeesInfo.phoneNumber + '</td>'
@@ -113,7 +112,8 @@
                         + '</td>'
                         + '<td><button id="edit" class="btn btn-default reg-info-row-edit" style="color:green;""><span class="glyphicon glyphicon-edit"></span></button></td>'
                         + '<td><button id="save" class="btn btn-default reg-info-row-save" disabled><span class="glyphicon glyphicon-saved"></span></button></td>' +
-                        '</tr>';
+                        + '<td class="info-id" style="display: none">' + refugeesInfo.id + '</td>' +
+                       '</tr>';
 
                     $(".reg-info-table-body").append(html);
                 });
@@ -136,17 +136,17 @@
 
         $('.filterable .filters input').keyup(function (e) {
             /* Ignore tab key */
-            var code = e.keyCode || e.which;
+            let code = e.keyCode || e.which;
             if (code == '9') return;
             /* Useful DOM data and selectors */
-            var $input = $(this),
+            let $input = $(this),
                 inputContent = $input.val().toLowerCase(),
                 $panel = $input.parents('.filterable'),
                 column = $panel.find('.filters th').index($input.parents('th')),
                 $table = $panel.find('.table'),
                 $rows = $table.find('tbody tr');
             /* Dirtiest filter function ever ;) */
-            var $filteredRows = $rows.filter(function () {
+            let $filteredRows = $rows.filter(function () {
                 var value = $(this).find('td').eq(column).text().toLowerCase();
                 return value.indexOf(inputContent) === -1;
             });
@@ -198,7 +198,6 @@
                 <tbody class="reg-info-table-body">
                 <#list registrationInfos as registrationInfo>
                     <tr>
-                        <td class="info-id" style="display: none">${registrationInfo.id}</td>
                         <td>${registrationInfo.receiveDate}</td>
                         <td>${registrationInfo.stream}</td>
                         <td>${registrationInfo.phoneNumber}</td>
@@ -215,6 +214,7 @@
                         </td>
                         <td><button class="btn btn-default reg-info-row"><span class="glyphicon glyphicon-edit"></span></button></td>
                         <td><button class="btn btn-default reg-info-row-save" disabled><span class="glyphicon glyphicon-saved"></span></button></td>
+                        <td class="info-id" style="display: none">${registrationInfo.id}</td>
                     </tr>
                 </#list>
                 </tbody>
