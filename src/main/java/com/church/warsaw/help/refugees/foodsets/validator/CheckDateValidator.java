@@ -38,6 +38,8 @@ public class CheckDateValidator implements ConstraintValidator<CheckDateFormat, 
   {
     DayOfWeek dayOfWeek = day.getDayOfWeek();
 
-    return !DayOfWeek.SATURDAY.equals(dayOfWeek) && !DayOfWeek.SUNDAY.equals(dayOfWeek);
+    return !DayOfWeek.FRIDAY.equals(dayOfWeek)
+        && !DayOfWeek.SATURDAY.equals(dayOfWeek)
+        && !DayOfWeek.SUNDAY.equals(dayOfWeek);
   }
 }
