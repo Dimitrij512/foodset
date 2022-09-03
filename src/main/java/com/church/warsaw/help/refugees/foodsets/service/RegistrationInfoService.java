@@ -56,7 +56,7 @@ public class RegistrationInfoService {
     }
 
     return Pair.of(HAS_ERROR_KEY,
-        format("Перевищена кількікість реєстрацій. " +
+        format("Перевищена кількікість реєстрацій. \n" +
                 "Орієнтована дата наступної реєстрації %s",
             latestRegistrationInfo.get().getReceiveDate().plusWeeks(2)));
   }

@@ -15,8 +15,10 @@
             crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
     <#--    <!-- Bootstrap Date-Picker Plugin &ndash;&gt;-->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
     <title>Заповніть форму</title>
 </head>
 <style>
@@ -200,9 +202,9 @@
 </style>
 
 <script>
-    $(document).ready(function(){
-        let date_input=$('input[name="receiveDate"]');
-        let container=$('.bootstrap-iso').length>0 ? $('.bootstrap-iso').parent() : "body";
+    $(document).ready(function () {
+        let date_input = $('input[name="receiveDate"]');
+        let container = $('.bootstrap-iso').length > 0 ? $('.bootstrap-iso').parent() : "body";
 
         let oneWeekFuture = new Date();
         oneWeekFuture.setDate(oneWeekFuture.getDate() + 7);
@@ -214,42 +216,46 @@
             autoclose: true,
             startDate: new Date(),
             endDate: oneWeekFuture,
-            daysOfWeekDisabled:[6,0],
+            daysOfWeekDisabled: [5, 6, 0],
         })
 
-        $('#date').datepicker().on("changeDate", function() {
+        $('#date').datepicker().on("changeDate", function () {
             console.log("changeDate")
             let selectedDate = $('#date').val();
             $.get("/registration-infos/stream-of-delivery/?receiveDate=" + selectedDate, function (response) {
 
-                if(!$.trim(response)) {
+                if (!$.trim(response)) {
                     $('#registration-closed').removeAttr('hidden');
-                    $('#stream-of-delivery').attr("hidden",true);
-                    $('#user-info').attr("hidden",true);
+                    $('#stream-of-delivery').attr("hidden", true);
+                    $('#user-info').attr("hidden", true);
 
                 } else {
                     $("#time").empty()
-                    response.forEach(function(streamOfDelivery) {
+                    response.forEach(function (streamOfDelivery) {
                         $("#time").append($('<option>', {value: streamOfDelivery, text: streamOfDelivery}));
                     })
-                    $('#registration-closed').attr("hidden",true);
+                    $('#registration-closed').attr("hidden", true);
                     $('#stream-of-delivery').removeAttr('hidden');
                     $('#user-info').removeAttr('hidden');
                 }
             });
         });
 
-        $('#submit-registration-form').submit(function() {
-            $('#registration-closed').attr("hidden",true);
-            $('#error-notification').attr("hidden",true);
+        $('#submit-registration-form').submit(function () {
+            $('#registration-closed').attr("hidden", true);
+            $('#error-notification').attr("hidden", true);
         });
     })
 
     function phoneFormat(input) {
-        input = input.replace(/\D/g,'');
+        input = input.replace(/\D/g, '');
         let size = input.length;
-        if (size>3) {input=input.slice(0,3)+" "+input.slice(3,12)}
-        if (size>6) {input=input.slice(0,7)+" " +input.slice(7)}
+        if (size > 3) {
+            input = input.slice(0, 3) + " " + input.slice(3, 12)
+        }
+        if (size > 6) {
+            input = input.slice(0, 7) + " " + input.slice(7)
+        }
 
         return input;
     }
@@ -274,63 +280,81 @@
         <label for="date">День:</label>
         <input id="date" name="receiveDate" placeholder="дд-мм-рр" type="text"
                value="<#if registrationInfo??>${registrationInfo.receiveDate}<#else></#if>"/>
-    <div id="stream-of-delivery" hidden>
-        <label for="time">Година:</label>
-        <select id="time" name="stream">
-                <option selected value="<#if registrationInfo??>${registrationInfo.stream}<#else></#if>"/></option>
-        </select>
-    </div>
-    <div id="registration-closed" hidden>
-        <div>
-            <h5 class="text-danger">На дану дату реєстрація закрита </h5>
+        <div id="stream-of-delivery" hidden>
+            <label for="time">Година:</label>
+            <select id="time" name="stream">
+                <option selected value="<#if registrationInfo??>${registrationInfo.stream}<#else></#if>"/>
+                </option>
+            </select>
         </div>
-    </div>
+        <div id="registration-closed" hidden>
+            <div>
+                <h5 class="text-danger">На дану дату реєстрація закрита </h5>
+            </div>
+        </div>
     </fieldset>
 
     <div id="user-info" hidden>
-    <fieldset>
-        <legend><span class="number">2</span> Ваші дані</legend>
+        <fieldset>
+            <legend><span class="number">2</span> Ваші дані</legend>
 
-        <label for="surname">Прізвище:</label>
-        <input type="text" id="surname" name="surname" value="<#if registrationInfo??>${registrationInfo.surname}<#else></#if>">
+            <label for="surname">Прізвище:</label>
+            <input type="text" required
+                   oninvalid="this.setCustomValidity('Вкажіть Ваше прізвище')"
+                   oninput="this.setCustomValidity('')"
+                   id="surname" name="surname"
+                   value="<#if registrationInfo??>${registrationInfo.surname}<#else></#if>">
 
-        <label for="name">Ім'я:</label>
-        <input type="text" id="name" name="name" value="<#if registrationInfo??>${registrationInfo.name}<#else></#if>">
+            <label for="name">Ім'я:</label>
+            <input type="text" required
+                   oninvalid="this.setCustomValidity('поле не може бути пустим')"
+                   oninput="this.setCustomValidity('')"
+                   id="name" name="name"
+                   value="<#if registrationInfo??>${registrationInfo.name}<#else></#if>">
 
-        <label for="phone_number">Телефон +48:</label>
+            <label for="phone_number">Телефон +48:</label>
 
-        <input type="text" id="phone_number" name="phoneNumber" placeholder="телефон Польща" oninput="this.value=phoneFormat(this.value)" value="<#if registrationInfo??>${registrationInfo.phoneNumber}<#else></#if>">
+            <input type="text" required placeholder="телефон Польща"
+                   oninput="this.value=phoneFormat(this.value)"
+                   id="phone_number" name="phoneNumber"
+                   value="<#if registrationInfo??>${registrationInfo.phoneNumber}<#else></#if>">
 
-        <label for="phone_number_messenger">Телефон +:</label>
-        <input type="text" id="phone_number_messenger" name="phoneNumberMessenger" placeholder="телефон Viber, Whatsapp, Messenger, Telegram..." oninput="this.value=phoneFormat(this.value)" value="<#if registrationInfo??>${registrationInfo.phoneNumberMessenger}<#else></#if>">
+            <label for="phone_number_messenger">Телефон +:</label>
+            <input type="text" required id="phone_number_messenger" name="phoneNumberMessenger"
+                   placeholder="телефон Viber, Whatsapp, Messenger, Telegram..."
+                   oninput="this.value=phoneFormat(this.value)"
+                   value="<#if registrationInfo??>${registrationInfo.phoneNumberMessenger}<#else></#if>">
 
-        <label for="email">електронна пошта:</label>
-        <input type="email" id="email" name="email" placeholder="ваша електронна пошта" value="<#if registrationInfo??>${registrationInfo.email}<#else></#if>">
+            <label for="email">електронна пошта:</label>
+            <input type="email" required id="email"  oninvalid="this.setCustomValidity('вкажіть Вашу електронну пошту')"
+                   oninput="this.setCustomValidity('')"
+                   name="email" placeholder="ваша електронна пошта"
+                   value="<#if registrationInfo??>${registrationInfo.email}<#else></#if>">
 
-        <label for="kids_count">Кількість членів сім'ї:</label>
-        <select id="kids_count" name="kidsCount">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-        </select>
+            <label for="kids_count">Кількість членів сім'ї:</label>
+            <select id="kids_count" name="kidsCount">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select>
 
-        <label>Тип набору:</label>
-        <label for="food_set" class="light">
-            <input type="radio" id="food_set" value="FOOD_SET" name="typeSet">
-            <div class="checkbox-container"></div>
-            Продуктовий набір
-        </label>
-        <label for="complex_dinner" class="light">
-            <input type="radio" id="complex_dinner" value="COMPLEX_DINNER" name="typeSet">
-            <div class="checkbox-container"></div>
-            Комплексний обід
-        </label>
-    </fieldset>
-    <button type="submit">Надіслати</button>
+            <label>Тип набору:</label>
+            <label for="food_set" class="light">
+                <input type="radio" id="food_set" value="FOOD_SET" name="typeSet">
+                <div class="checkbox-container"></div>
+                Продуктовий набір
+            </label>
+            <label for="complex_dinner" class="light">
+                <input type="radio" id="complex_dinner" value="COMPLEX_DINNER" name="typeSet">
+                <div class="checkbox-container"></div>
+                Комплексний обід
+            </label>
+        </fieldset>
+        <button type="submit">Надіслати</button>
 
     </div>
 </form>

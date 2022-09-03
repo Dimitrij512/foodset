@@ -40,10 +40,10 @@ public class RegistrationInfo {
   @NotBlank(message = "фамілія не може бути пустим")
   String surname;
 
-  @Pattern(regexp = PHONE_DIGITS_AND_SPACES_REGEX, message = "телефон вказано не вірно")
+  @Pattern(regexp = PHONE_DIGITS_AND_SPACES_REGEX, message = "ви не вказали телефон")
   String phoneNumber;
 
-  @Pattern(regexp = PHONE_DIGITS_AND_SPACES_REGEX, message = "телефон месенджера вказано не вірно")
+  @Pattern(regexp = PHONE_DIGITS_AND_SPACES_REGEX, message = "ви не вказали телефон месенджера")
   String phoneNumberMessenger;
 
   @Pattern(regexp = EMAIL_REGEX, message = "email вказано не вірно")
@@ -53,7 +53,7 @@ public class RegistrationInfo {
   @Max(value = 10, message = "кількість дітей не може бути більше 10")
   int kidsCount;
 
-  @NotBlank(message = "тип допомоги не може бути пустим")
+  @NotBlank(message = "ви не вказали тип набору")
   String typeSet;
 
   @Builder.Default
