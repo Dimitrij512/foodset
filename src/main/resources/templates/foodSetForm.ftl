@@ -275,7 +275,7 @@
     </#if>
 
     <fieldset>
-        <legend><span class="number">1</span> Вибріть день</legend>
+        <legend><span class="number">1</span> Виберіть день</legend>
 
         <label for="date">День:</label>
         <input id="date" name="receiveDate" placeholder="дд-мм-рр" type="text"
