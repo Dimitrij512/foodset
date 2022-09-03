@@ -17,8 +17,8 @@ spring:
 
 food-set-form:
   map-streams-with-max-count:
-    "11-00": 75
-    "14-00": 75
+    "11-00": 65
+    "14-00": 65
 
 admin-user:
   username: "${USER_NAME:}"
