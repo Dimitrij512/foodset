@@ -110,9 +110,9 @@
                                   + '<option>Ні</option>'
                               + '</select>'
                         + '</td>'
+                        + '<td class="info-id" style="display: none">' + refugeesInfo.id + '</td>'
                         + '<td><button id="edit" class="btn btn-default reg-info-row-edit" style="color:green;""><span class="glyphicon glyphicon-edit"></span></button></td>'
                         + '<td><button id="save" class="btn btn-default reg-info-row-save" disabled><span class="glyphicon glyphicon-saved"></span></button></td>' +
-                        + '<td class="info-id" style="display: none">' + refugeesInfo.id + '</td>' +
                        '</tr>';
 
                     $(".reg-info-table-body").append(html);
@@ -212,9 +212,9 @@
                                 <option>Ні</option>
                             </select>
                         </td>
+                        <td class='info-id' style="display: none">${registrationInfo.id}</td>
                         <td><button class="btn btn-default reg-info-row"><span class="glyphicon glyphicon-edit"></span></button></td>
                         <td><button class="btn btn-default reg-info-row-save" disabled><span class="glyphicon glyphicon-saved"></span></button></td>
-                        <td class="info-id" style="display: none">${registrationInfo.id}</td>
                     </tr>
                 </#list>
                 </tbody>
