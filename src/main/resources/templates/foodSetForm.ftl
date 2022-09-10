@@ -1,4 +1,4 @@
-<html lang="u">
+<html lang="fr">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,12 +13,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
     <#--    <!-- Bootstrap Date-Picker Plugin &ndash;&gt;-->
-    <script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <title>Заповніть форму</title>
 </head>
 <style>
@@ -203,24 +201,22 @@
 
 <script>
     $(document).ready(function () {
-        let date_input = $('input[name="receiveDate"]');
-        let container = $('.bootstrap-iso').length > 0 ? $('.bootstrap-iso').parent() : "body";
-
         let oneWeekFuture = new Date();
         oneWeekFuture.setDate(oneWeekFuture.getDate() + 7);
 
-        date_input.datepicker({
-            format: 'yyyy-mm-dd',
-            container: container,
-            todayHighlight: true,
-            autoclose: true,
+        $('#date').datepicker({
+            showAnim: "fold",
+            minDate: new Date(),
+            maxDate: oneWeekFuture,
+            firstDay: 1,
             startDate: new Date(),
-            endDate: oneWeekFuture,
-            daysOfWeekDisabled: [5, 6, 0],
-        })
+            monthNames: ["Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень", "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"],
+            dayNamesMin: ["Нд", "Пн", "Ві", "Се", "Че", "Пя", "Су"],
+            dateFormat: "yy-mm-dd",
+            beforeShowDay: $.datepicker.noWeekends
+        });
 
-        $('#date').datepicker().on("changeDate", function () {
-            console.log("changeDate")
+        $('#date').change("changeDate", function () {
             let selectedDate = $('#date').val();
             $.get("/registration-infos/stream-of-delivery/?receiveDate=" + selectedDate, function (response) {
 
@@ -240,12 +236,12 @@
                 }
             });
         });
+    });
 
-        $('#submit-registration-form').submit(function () {
-            $('#registration-closed').attr("hidden", true);
-            $('#error-notification').attr("hidden", true);
-        });
-    })
+    $('#submit-registration-form').submit(function () {
+        $('#registration-closed').attr("hidden", true);
+        $('#error-notification').attr("hidden", true);
+    });
 
     function phoneFormat(input) {
         input = input.replace(/\D/g, '');
@@ -326,7 +322,7 @@
                    value="<#if registrationInfo??>${registrationInfo.phoneNumberMessenger}<#else></#if>">
 
             <label for="email">електронна пошта:</label>
-            <input type="email" required id="email"  oninvalid="this.setCustomValidity('вкажіть Вашу електронну пошту')"
+            <input type="email" required id="email" oninvalid="this.setCustomValidity('вкажіть Вашу електронну пошту')"
                    oninput="this.setCustomValidity('')"
                    name="email" placeholder="ваша електронна пошта"
                    value="<#if registrationInfo??>${registrationInfo.email}<#else></#if>">
