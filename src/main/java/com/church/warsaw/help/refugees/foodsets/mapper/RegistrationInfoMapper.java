@@ -4,6 +4,7 @@ import com.church.warsaw.help.refugees.foodsets.TypeSet;
 import com.church.warsaw.help.refugees.foodsets.dto.RegistrationInfo;
 import com.church.warsaw.help.refugees.foodsets.entity.RegistrationInfoEntity;
 import java.time.LocalDate;
+import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -36,7 +37,9 @@ public interface RegistrationInfoMapper {
 
   @Named("receiveDateLocalDate")
   static LocalDate getReceiveDate(String receiveDate) {
-    return LocalDate.parse(receiveDate);
+    return StringUtils.isBlank(receiveDate)
+        ? LocalDate.now()
+        : LocalDate.parse(receiveDate);
   }
 
   @Named("receiveDateToString")

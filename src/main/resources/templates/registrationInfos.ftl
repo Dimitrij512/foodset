@@ -46,6 +46,10 @@
             window.location.href='/registration-infos/generate-pdf-file/?receiveDate='+ selectedDate;
         });
 
+        $('#create-registration-info').click(function () {
+            window.location.href='/registration-infos/create/free';
+        });
+
         document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
         $('tbody').on('focus', 'button', function() {
@@ -53,7 +57,6 @@
             let editButton = $(this).closest('tr').find('.reg-info-row-edit');
 
             //edit
-            console.log("EDIT")
             if(saveButton.is(':disabled')) {
                 $(this).closest('tr').find('.is-receive-row-select').prop("disabled", false)
                 $(this).prop("disabled", true).css('color', 'gray');
@@ -175,6 +178,12 @@
                 <div class="pull-right" style="margin-right: 2px">
                     <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span>
                         Фільтр
+                    </button>
+                </div>
+
+                <div class="pull-right" style="margin-right: 2px">
+                    <button class="btn btn-default btn-xs" id="create-registration-info"><span class="glyphicon glyphicon-plus"></span>
+                        Додати
                     </button>
                 </div>
 

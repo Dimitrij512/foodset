@@ -82,6 +82,19 @@ public class RegistrationInfoController {
     return "redirect:/food-set-form/success";
   }
 
+  @GetMapping("/registration-infos/create/free")
+  public String foodSetFormFreePage() {
+    return "foodSetFormFree";
+  }
+
+  @PostMapping("/registration-infos/create/free")
+  public String createFree(@ModelAttribute RegistrationInfo registrationInfo) {
+
+    registrationInfoService.registerFormFree(registrationInfo);
+
+    return "redirect:/registration-infos";
+  }
+
   @PutMapping("/registration-infos/{id}")
   @ResponseStatus(value = HttpStatus.OK)
   public void update(@PathVariable("id") String id, @RequestBody UpdateRegistrationInfoRequest request) {

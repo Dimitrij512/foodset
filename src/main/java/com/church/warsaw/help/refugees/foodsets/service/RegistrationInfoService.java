@@ -66,6 +66,13 @@ public class RegistrationInfoService {
   }
 
   @Transactional
+  public void registerFormFree(RegistrationInfo registrationInfo) {
+    RegistrationInfoEntity regInfo =
+        repository.save(RegistrationInfoMapper.INSTANCE.toEntity(registrationInfo));
+    log.info("Registered form by id={} without validation", regInfo.getId());
+  }
+
+  @Transactional
   public void updateForm(String id, UpdateRegistrationInfoRequest request) {
 
     if(!repository.existsById(id)) {

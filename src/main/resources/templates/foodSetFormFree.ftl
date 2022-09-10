@@ -1,4 +1,5 @@
-<html lang="fr">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,6 +20,7 @@
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <title>Заповніть форму</title>
 </head>
+
 <style>
     *, *:before, *:after {
         -moz-box-sizing: border-box;
@@ -201,137 +203,54 @@
 
 <script>
     $(document).ready(function () {
-        let oneWeekFuture = new Date();
-        oneWeekFuture.setDate(oneWeekFuture.getDate() + 7);
-
         $('#date').datepicker({
             showAnim: "fold",
             minDate: new Date(),
-            maxDate: oneWeekFuture,
             firstDay: 1,
             startDate: new Date(),
             monthNames: ["Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень", "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"],
             dayNamesMin: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
             dateFormat: "yy-mm-dd",
-            beforeShowDay: function (date) {
-                let day = date.getDay();
-                return [(day > 0 && day < 5), ""];
-            }
-        });
-
-        $('#date').change("changeDate", function () {
-            let selectedDate = $('#date').val();
-            $.get("/registration-infos/stream-of-delivery/?receiveDate=" + selectedDate, function (response) {
-
-                if (!$.trim(response)) {
-                    $('#registration-closed').removeAttr('hidden');
-                    $('#stream-of-delivery').attr("hidden", true);
-                    $('#user-info').attr("hidden", true);
-
-                } else {
-                    $("#time").empty()
-                    response.forEach(function (streamOfDelivery) {
-                        $("#time").append($('<option>', {value: streamOfDelivery, text: streamOfDelivery}));
-                    })
-                    $('#registration-closed').attr("hidden", true);
-                    $('#stream-of-delivery').removeAttr('hidden');
-                    $('#user-info').removeAttr('hidden');
-                }
-            });
+            beforeShowDay: $.datepicker.noWeekends
         });
     });
-
-    $('#submit-registration-form').submit(function () {
-        $('#registration-closed').attr("hidden", true);
-        $('#error-notification').attr("hidden", true);
-    });
-
-    function phoneFormat(input) {
-        input = input.replace(/\D/g, '');
-        let size = input.length;
-        if (size > 3) {
-            input = input.slice(0, 3) + " " + input.slice(3, 12)
-        }
-        if (size > 6) {
-            input = input.slice(0, 7) + " " + input.slice(7)
-        }
-
-        return input;
-    }
 </script>
 
 <body>
-
-<form id="submit-registration-form" action="/registration-infos/create" method="post">
+<form id="submit-registration-form" action="/registration-infos/create/free" method="post">
 
     <h1>Реєстрація</h1>
 
-    <#if error??>
-        <div id="error-notification">
-            <h5 class="text-danger">Помилка реєстрації: </h5>
-            <pre class="text-danger">${error}</pre>
-        </div>
-    </#if>
-
     <fieldset>
         <legend><span class="number">1</span> Виберіть день</legend>
-
         <label for="date">День:</label>
-        <input id="date" name="receiveDate" placeholder="дд-мм-рр" type="text"
-               required readonly
+        <input id="date" name="receiveDate"
+               type="text" readonly
                oninvalid="this.setCustomValidity('Вкажіть день')"
                oninput="this.setCustomValidity('')"
-               value="<#if registrationInfo??>${registrationInfo.receiveDate}<#else></#if>"/>
-        <div id="stream-of-delivery" hidden>
-            <label for="time">Година:</label>
-            <select id="time" name="stream">
-                <option selected value="<#if registrationInfo??>${registrationInfo.stream}<#else></#if>"/>
-                </option>
-            </select>
-        </div>
-        <div id="registration-closed" hidden>
-            <div>
-                <h5 class="text-danger">На дану дату реєстрація закрита </h5>
-            </div>
-        </div>
+               placeholder="дд-мм-рр"/>
     </fieldset>
 
-    <div id="user-info" hidden>
+    <div id="user-info">
         <fieldset>
             <legend><span class="number">2</span> Ваші дані</legend>
 
             <label for="surname">Прізвище:</label>
             <input type="text" required
-                   oninvalid="this.setCustomValidity('Вкажіть Ваше прізвище')"
+                   oninvalid="this.setCustomValidity('Вкажіть прізвище особи')"
                    oninput="this.setCustomValidity('')"
-                   id="surname" name="surname"
-                   value="<#if registrationInfo??>${registrationInfo.surname}<#else></#if>">
+                   id="surname" name="surname">
 
             <label for="name">Ім'я:</label>
             <input type="text" required
                    oninvalid="this.setCustomValidity('поле не може бути пустим')"
                    oninput="this.setCustomValidity('')"
-                   id="name" name="name"
-                   value="<#if registrationInfo??>${registrationInfo.name}<#else></#if>">
+                   id="name" name="name">
 
-            <label for="phone_number">Телефон +48:</label>
+            <label for="phone_number">Телефон +:</label>
 
-            <input type="text" required placeholder="телефон Польща"
-                   oninput="this.value=phoneFormat(this.value)"
-                   id="phone_number" name="phoneNumber"
-                   value="<#if registrationInfo??>${registrationInfo.phoneNumber}<#else></#if>">
-
-            <label for="phone_number_messenger">Телефон +:</label>
-            <input type="text" required id="phone_number_messenger" name="phoneNumberMessenger"
-                   placeholder="телефон Viber, Whatsapp, Messenger, Telegram..."
-                   oninput="this.value=phoneFormat(this.value)"
-                   value="<#if registrationInfo??>${registrationInfo.phoneNumberMessenger}<#else></#if>">
-
-            <label for="email">електронна пошта:</label>
-            <input type="email" required id="email" oninvalid="this.setCustomValidity('вкажіть Вашу електронну пошту')"
-                   oninput="this.setCustomValidity('')"
-                   name="email" placeholder="ваша електронна пошта"
-                   value="<#if registrationInfo??>${registrationInfo.email}<#else></#if>">
+            <input type="number" required placeholder="телефон"
+                   id="phone_number" name="phoneNumber">
 
             <label for="kids_count">Кількість членів сім'ї:</label>
             <select id="kids_count" name="kidsCount">
@@ -356,11 +275,8 @@
                 Комплексний обід
             </label>
         </fieldset>
-        <button type="submit">Надіслати</button>
-
+        <button type="submit">Зареєструвати</button>
     </div>
 </form>
-
 </body>
-
 </html>
