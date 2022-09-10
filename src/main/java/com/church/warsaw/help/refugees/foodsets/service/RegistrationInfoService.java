@@ -110,11 +110,11 @@ public class RegistrationInfoService {
     return result;
   }
 
-  public boolean getReceived(String receiveString) {
+  private boolean getReceived(String receiveString) {
     return "Так".equals(receiveString);
   }
 
-  public static boolean isLatestReceivedDateBiggerThanTwoWeeks(LocalDate latestReceivedDate) {
+  private static boolean isLatestReceivedDateBiggerThanTwoWeeks(LocalDate latestReceivedDate) {
     LocalDate weeksFromLatestReceivedDate = latestReceivedDate.plusWeeks(2);
     LocalDate today = LocalDate.now();
 

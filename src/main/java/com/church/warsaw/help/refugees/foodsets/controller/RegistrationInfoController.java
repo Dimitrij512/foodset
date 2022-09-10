@@ -12,8 +12,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +49,6 @@ public class RegistrationInfoController {
 
   @GetMapping("/food-set-form")
   public String foodSetFormPage() {
-
 
     return "foodSetForm";
   }
@@ -136,8 +137,11 @@ public class RegistrationInfoController {
                               HttpServletResponse response) throws IOException {
 
     LocalDate date = receiveDate == null ? LocalDate.now() : LocalDate.parse(receiveDate);
+
     List<RegistrationInfo> registrationInfos =
-        registrationInfoService.getRegistrationInfoByDate(date);
+        registrationInfoService.getRegistrationInfoByDate(date).stream()
+            .sorted(Comparator.comparing(RegistrationInfo::getSurname))
+            .collect(Collectors.toList());
 
     response.setContentType("application/pdf");
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss");
