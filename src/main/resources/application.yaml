@@ -14,11 +14,22 @@ spring:
       uri: "${MONGO_DB_URI:}"
       database: "${MONGO_DB_DATABASE:}"
 
-
 food-set-form:
-  map-streams-with-max-count:
+  monday-configuration:
     "11-00": 65
     "14-00": 65
+  tuesday-configuration:
+    "11-00": 65
+    "14-00": 65
+  wednesday-configuration:
+    "11-00": 65
+    "14-00": 65
+  thursday-configuration:
+    "11-00": 65
+    "14-00": 65
+  friday-configuration:
+    "11-00": 0
+    "14-00": 0
 
 admin-user:
   username: "${USER_NAME:}"

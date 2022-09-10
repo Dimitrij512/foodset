@@ -9,9 +9,12 @@ import com.church.warsaw.help.refugees.foodsets.email.EmailService;
 import com.church.warsaw.help.refugees.foodsets.entity.RegistrationInfoEntity;
 import com.church.warsaw.help.refugees.foodsets.mapper.RegistrationInfoMapper;
 import com.church.warsaw.help.refugees.foodsets.repository.RegistrationInfoRepository;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -94,15 +97,16 @@ public class RegistrationInfoService {
   public List<String> getAvailableStreamsByDate(LocalDate localDate) {
 
     List<RegistrationInfoEntity> registrationsForms = repository.findAllByReceiveDate(localDate);
-    Set<String> streamsOfDelivery = foodSetConfiguration.getMapStreamsWithMaxCount().keySet();
+    Map<String, Integer> streamWithCountByDay = getStreamsWithCount(localDate);
 
+    Set<String> streamsOfDelivery = streamWithCountByDay.keySet();
     List<String> result = new ArrayList<>();
 
     streamsOfDelivery.forEach(s -> {
       int countInDb =
           (int) registrationsForms.stream().filter(r -> r.getStream().equals(s)).count();
 
-      if (countInDb < foodSetConfiguration.getMapStreamsWithMaxCount().get(s)) {
+      if (countInDb < streamWithCountByDay.get(s)) {
         result.add(s);
       }
     });
@@ -114,11 +118,30 @@ public class RegistrationInfoService {
     return "Так".equals(receiveString);
   }
 
-  private static boolean isLatestReceivedDateBiggerThanTwoWeeks(LocalDate latestReceivedDate) {
+  private boolean isLatestReceivedDateBiggerThanTwoWeeks(LocalDate latestReceivedDate) {
     LocalDate weeksFromLatestReceivedDate = latestReceivedDate.plusWeeks(2);
     LocalDate today = LocalDate.now();
 
     return today.isEqual(weeksFromLatestReceivedDate) || today.isAfter(weeksFromLatestReceivedDate);
+  }
+
+  private Map<String, Integer> getStreamsWithCount(LocalDate date) {
+    DayOfWeek dayOfWeek = date.getDayOfWeek();
+
+    switch (dayOfWeek) {
+      case MONDAY:
+        return foodSetConfiguration.getMondayConfiguration();
+      case TUESDAY:
+        return foodSetConfiguration.getTuesdayConfiguration();
+      case WEDNESDAY:
+        return foodSetConfiguration.getWednesdayConfiguration();
+      case THURSDAY:
+        return foodSetConfiguration.getThursdayConfiguration();
+      case FRIDAY:
+        return foodSetConfiguration.getFridayConfiguration();
+      default:
+        return Collections.emptyMap();
+    }
   }
 
 }
