@@ -2,8 +2,9 @@
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <#--    <!-- Bootstrap Date-Picker Plugin &ndash;&gt;-->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <!------ Include the above in your HEAD tag ---------->
 
 <style>
@@ -52,6 +53,7 @@
             let editButton = $(this).closest('tr').find('.reg-info-row-edit');
 
             //edit
+            console.log("EDIT")
             if(saveButton.is(':disabled')) {
                 $(this).closest('tr').find('.is-receive-row-select').prop("disabled", false)
                 $(this).prop("disabled", true).css('color', 'gray');
@@ -78,16 +80,16 @@
             }
         });
 
-        let date_input=$('input[name="date"]');
-        let container=$('.bootstrap-iso').length>0 ? $('.bootstrap-iso').parent() : "body";
-        date_input.datepicker({
-            format: 'yyyy-mm-dd',
-            container: container,
-            todayHighlight: true,
-            autoclose: true
+        $('#date').datepicker({
+            showAnim: "fold",
+            firstDay: 1,
+            monthNames: ["Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень", "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"],
+            dayNamesMin: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+            dateFormat: "yy-mm-dd",
+            beforeShowDay: $.datepicker.noWeekends
         });
 
-        $('#date').datepicker().on("changeDate", function() {
+        $('#date').datepicker().change("changeDate", function() {
             let selectedDate = $('#date').val();
             $.get("/registration-infos-content/?receiveDate=" + selectedDate, function (response) {
 
@@ -102,8 +104,7 @@
                         + '<td>' + refugeesInfo.name + '</td>'
                         + '<td>' + refugeesInfo.kidsCount + '</td>'
                         + '<td>' + refugeesInfo.typeSet + '</td>'
-                        // + '<td class="is-receive-row">' + refugeesInfo.isReceive + '</td>'
-                        + '<td class="is-receive-row" id=  + refugeesInfo.id>'
+                        + '<td class="is-receive-row">'
                               + '<select disabled class="is-receive-row-select">'
                                   + '<option selected>' + refugeesInfo.receive + '</option>'
                                   + '<option>Так</option>'
@@ -154,7 +155,7 @@
             $rows.show();
             $filteredRows.hide();
             if ($filteredRows.length === $rows.length) {
-                $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="' + $table.find('.filters th').length + '">No result found</td></tr>'));
+                $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="' + $table.find('.filters th').length + '">Нічого не знайдено</td></tr>'));
             }
         });
     });
@@ -205,16 +206,16 @@
                         <td>${registrationInfo.name}</td>
                         <td>${registrationInfo.kidsCount}</td>
                         <td>${registrationInfo.typeSet}</td>
-                        <td class='is-received-row' id=${registrationInfo.id}>
-                            <select disabled>
+                        <td class='is-received-row'>
+                            <select disabled  class="is-receive-row-select">
                                 <option selected>${registrationInfo.receive}</option>
                                 <option>Так</option>
                                 <option>Ні</option>
                             </select>
                         </td>
-                        <td class='info-id' style="display: none">${registrationInfo.id}</td>
-                        <td><button class="btn btn-default reg-info-row"><span class="glyphicon glyphicon-edit"></span></button></td>
-                        <td><button class="btn btn-default reg-info-row-save" disabled><span class="glyphicon glyphicon-saved"></span></button></td>
+                        <td class='info-id' style="display:none">${registrationInfo.id}</td>
+                        <td><button id="edit" class="btn btn-default reg-info-row-edit" style= color:green><span class="glyphicon glyphicon-edit"></span></button></td>
+                        <td><button id="save" class="btn btn-default reg-info-row-save" disabled><span class="glyphicon glyphicon-saved"></span></button></td>
                     </tr>
                 </#list>
                 </tbody>

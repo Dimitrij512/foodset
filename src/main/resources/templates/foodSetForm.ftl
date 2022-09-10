@@ -211,7 +211,7 @@
             firstDay: 1,
             startDate: new Date(),
             monthNames: ["Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень", "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"],
-            dayNamesMin: ["Нд", "Пн", "Ві", "Се", "Че", "Пя", "Су"],
+            dayNamesMin: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
             dateFormat: "yy-mm-dd",
             beforeShowDay: $.datepicker.noWeekends
         });
