@@ -213,7 +213,10 @@
             monthNames: ["Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень", "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"],
             dayNamesMin: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
             dateFormat: "yy-mm-dd",
-            beforeShowDay: $.datepicker.noWeekends
+            beforeShowDay: function (date) {
+                let day = date.getDay();
+                return [(day > 0 && day < 5), ""];
+            }
         });
 
         $('#date').change("changeDate", function () {
