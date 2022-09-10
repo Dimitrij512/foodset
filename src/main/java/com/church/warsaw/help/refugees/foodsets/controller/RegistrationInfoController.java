@@ -94,7 +94,7 @@ public class RegistrationInfoController {
                                      @DateTimeFormat(pattern = "yyyy-mm-dd")
                                      LocalDate receiveDate, Model model) {
 
-    LocalDate date = receiveDate == null ? LocalDate.parse("2022-09-15") : receiveDate;
+    LocalDate date = receiveDate == null ? LocalDate.now() : receiveDate;
     List<RegistrationInfo> registrationInfos =
         registrationInfoService.getRegistrationInfoByDate(date);
 
