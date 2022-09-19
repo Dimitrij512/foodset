@@ -274,6 +274,7 @@
                 <div class="checkbox-container"></div>
                 Комплексний обід
             </label>
+            <input type="text" hidden value="00-00" name="stream">
         </fieldset>
         <button type="submit">Зареєструвати</button>
     </div>
