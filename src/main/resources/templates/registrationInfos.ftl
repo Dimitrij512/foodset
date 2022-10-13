@@ -41,9 +41,9 @@
 <script>
     $(document).ready(function () {
 
-        $('#generate-pdf').click(function () {
+        $('#generate-xls').click(function () {
             let selectedDate = $('#date').val();
-            window.location.href='/registration-infos/generate-pdf-file/?receiveDate='+ selectedDate;
+            window.location.href='/registration-infos/generate-excel-file/?receiveDate='+ selectedDate;
         });
 
         $('#create-registration-info').click(function () {
@@ -171,8 +171,8 @@
                 <h3 class="panel-title">Інформація про реєстрацію </h3>
 
                 <div class="pull-right">
-                    <button class="btn btn-default btn-xs btn-generate-pdf" id="generate-pdf"><span class="glyphicon glyphicon-file"></span>
-                        pdf
+                    <button class="btn btn-default btn-xs btn-generate-xls" id="generate-xls"><span class="glyphicon glyphicon-file"></span>
+                        xls
                     </button>
                 </div>
                 <div class="pull-right" style="margin-right: 2px">
@@ -200,7 +200,7 @@
                     <th><input type="text" class="form-control" placeholder="Телефон" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Фамілія" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Ім'я" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="Діти" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Члени сім'ї" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Тип" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Видано" disabled></th>
                 </tr>

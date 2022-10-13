@@ -2,6 +2,7 @@ package com.church.warsaw.help.refugees.foodsets.controller;
 
 import static com.church.warsaw.help.refugees.foodsets.service.RegistrationInfoService.HAS_ERROR_KEY;
 
+import com.church.warsaw.help.refugees.foodsets.docgenerator.ExcelGeneratorService;
 import com.church.warsaw.help.refugees.foodsets.docgenerator.PdfGeneratorService;
 import com.church.warsaw.help.refugees.foodsets.dto.RegistrationInfo;
 import com.church.warsaw.help.refugees.foodsets.service.RegistrationInfoService;
@@ -46,6 +47,7 @@ public class RegistrationInfoController {
   private final RegistrationInfoService registrationInfoService;
 
   private final PdfGeneratorService pdfGeneratorService;
+  private final ExcelGeneratorService excelGeneratorService;
 
   @GetMapping("/food-set-form")
   public String foodSetFormPage() {
@@ -165,6 +167,30 @@ public class RegistrationInfoController {
         "attachment; filename=registrations-infos" + currentDateTime + ".pdf");
 
     pdfGeneratorService.generate(registrationInfos, response);
+  }
+
+  @GetMapping("/registration-infos/generate-excel-file")
+  public void generateExcelFile(@RequestParam(name = "receiveDate", required = false)
+                              String receiveDate,
+                              HttpServletResponse response) {
+
+    LocalDate date = receiveDate == null ? LocalDate.now() : LocalDate.parse(receiveDate);
+
+    List<RegistrationInfo> registrationInfos =
+        registrationInfoService.getRegistrationInfoByDate(date).stream()
+            .sorted(Comparator.comparing(RegistrationInfo::getSurname))
+            .collect(Collectors.toList());
+
+    response.setContentType("application/vnd.ms-excel");
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss");
+
+    String currentDateTime = dateFormat.format(new Date());
+
+    response.setContentType("application/vnd.ms-excel");
+    response.setHeader("Content-Disposition",
+        "attachment; filename=registrations-infos" + currentDateTime + ".xls");
+
+    excelGeneratorService.generate(registrationInfos, response);
   }
 
 }
