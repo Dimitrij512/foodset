@@ -258,6 +258,10 @@
 
         return input;
     }
+
+    function cyrillicFormatOnly(input) {
+        return input.match(/[а-яієїґ\']+/ig);
+    }
 </script>
 
 <body>
@@ -300,17 +304,19 @@
         <fieldset>
             <legend><span class="number">2</span> Ваші дані</legend>
 
-            <label for="surname">Прізвище:</label>
+            <label for="surname">Прізвище (укр):</label>
             <input type="text" required
-                   oninvalid="this.setCustomValidity('Вкажіть Ваше прізвище')"
-                   oninput="this.setCustomValidity('')"
+                   maxlength="45"
+                   placeholder="ваше прізвище кирилецию"
+                   oninput="this.value=cyrillicFormatOnly(this.value)"
                    id="surname" name="surname"
                    value="<#if registrationInfo??>${registrationInfo.surname}<#else></#if>">
 
-            <label for="name">Ім'я:</label>
+            <label for="name">Ім'я (укр):</label>
             <input type="text" required
-                   oninvalid="this.setCustomValidity('поле не може бути пустим')"
-                   oninput="this.setCustomValidity('')"
+                   maxlength="45"
+                   placeholder="ваше ім'я кирилецию"
+                   oninput="this.value=cyrillicFormatOnly(this.value)"
                    id="name" name="name"
                    value="<#if registrationInfo??>${registrationInfo.name}<#else></#if>">
 
