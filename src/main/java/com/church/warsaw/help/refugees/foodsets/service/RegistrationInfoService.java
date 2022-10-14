@@ -41,7 +41,7 @@ public class RegistrationInfoService {
   public Pair<String, String> registerForm(RegistrationInfo registrationInfo) {
 
     Optional<RegistrationInfoEntity> latestRegistrationInfo = repository.
-        findAllBySurnameAndName(registrationInfo.getSurname(), registrationInfo.getName())
+        findAllBySurnameIgnoreCaseAndNameIgnoreCase(registrationInfo.getSurname(), registrationInfo.getName())
         .stream().max((e1, e2) -> e2.getReceiveDate().compareTo(e1.getReceiveDate()));
 
     if((!latestRegistrationInfo.isPresent())
