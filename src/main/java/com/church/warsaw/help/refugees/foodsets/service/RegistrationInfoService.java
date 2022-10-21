@@ -105,7 +105,8 @@ public class RegistrationInfoService {
 
     List<RegistrationInfoEntity> allByReceiveDate =
         repository.findAllByReceiveDateIsGreaterThanEqual(startDate).stream()
-            .filter(r -> r.getReceiveDate().isBefore(endDate))
+            .filter(r -> r.getReceiveDate().isBefore(endDate)
+                || r.getReceiveDate().isEqual(startDate))
             .collect(Collectors.toList());
 
     log.info("Found registrationInfos count={}, by the range startDate={} and endDate={}", allByReceiveDate.size(), startDate, endDate);

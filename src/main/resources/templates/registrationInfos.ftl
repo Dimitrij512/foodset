@@ -52,6 +52,7 @@
         });
 
         document.getElementById('date-from').value = new Date().toISOString().split('T')[0];
+        document.getElementById('date-to').value = new Date().toISOString().split('T')[0];
 
         $('tbody').on('focus', 'button', function() {
             let saveButton = $(this).closest('tr').find('.reg-info-row-save');
