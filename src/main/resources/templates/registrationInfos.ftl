@@ -42,15 +42,16 @@
     $(document).ready(function () {
 
         $('#generate-xls').click(function () {
-            let selectedDate = $('#date').val();
-            window.location.href='/registration-infos/generate-excel-file/?receiveDate='+ selectedDate;
+            let startDate = $('#date-from').val();
+            let endDate = $('#date-to').val();
+            window.location.href="/registration-infos/generate-excel-file/?startDate=" + startDate + "&endDate=" + endDate;
         });
 
         $('#create-registration-info').click(function () {
             window.location.href='/registration-infos/create/free';
         });
 
-        document.getElementById('date').value = new Date().toISOString().split('T')[0];
+        document.getElementById('date-from').value = new Date().toISOString().split('T')[0];
 
         $('tbody').on('focus', 'button', function() {
             let saveButton = $(this).closest('tr').find('.reg-info-row-save');
@@ -83,18 +84,38 @@
             }
         });
 
-        $('#date').datepicker({
-            showAnim: "fold",
-            firstDay: 1,
-            monthNames: ["Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень", "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"],
-            dayNamesMin: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
-            dateFormat: "yy-mm-dd",
-            beforeShowDay: $.datepicker.noWeekends
-        });
+        var dateFormat = "yy-mm-dd",
+            from = $( "#date-from")
+                .datepicker({
+                    dateFormat: "yy-mm-dd",
+                    defaultDate: "+1w",
+                    monthNames: ["Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень", "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"],
+                    dayNamesMin: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+                    numberOfMonths: 1
+                })
+                .on( "change", function() {
+                    to.datepicker( "option", "minDate", getDate( this ) );
+                }),
+            to = $( "#date-to").datepicker({
+                dateFormat: "yy-mm-dd",
+                monthNames: ["Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень", "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"],
+                dayNamesMin: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+                defaultDate: "+1w",
+                numberOfMonths: 1
+            })
+                .on( "change", function() {
+                    from.datepicker( "option", "maxDate", getDate( this ) );
+                });
 
-        $('#date').datepicker().change("changeDate", function() {
-            let selectedDate = $('#date').val();
-            $.get("/registration-infos-content/?receiveDate=" + selectedDate, function (response) {
+        function getDate( element ) {
+            return $.datepicker.parseDate( dateFormat, element.value );
+        }
+
+
+        $('#date-to').datepicker().change("changeDate", function() {
+            let startDate = $('#date-from').val();
+            let endDate = $('#date-to').val();
+            $.get("/registration-infos-content-by-range/?startDate=" + startDate + "&endDate=" + endDate, function (response) {
 
                 $(".reg-info-table-body").empty();
                 response.forEach(function(refugeesInfo) {
@@ -186,9 +207,11 @@
                         Додати
                     </button>
                 </div>
-
                 <div class="pull-right input-group" style="margin-right: 2px">
-                    <input class="btn btn-default btn-xs"  id="date" name="date" placeholder="дата" type="text">
+                    <input class="btn btn-default btn-xs"  id="date-to" name="date-to" placeholder="дата до" type="text">
+                </div>
+                <div class="pull-right input-group" style="margin-right: 2px">
+                    <input class="btn btn-default btn-xs"  id="date-from" name="date-from" placeholder="дата від" type="text">
                 </div>
 
             </div>

@@ -10,6 +10,8 @@ public interface RegistrationInfoRepository
 
   List<RegistrationInfoEntity> findAllByReceiveDate(LocalDate receiveDate);
 
+  List<RegistrationInfoEntity> findAllByReceiveDateIsGreaterThanEqual(LocalDate startDate);
+
   List<RegistrationInfoEntity> findAllByPhoneNumberAndSurname(String phoneNumber, String surname);
   List<RegistrationInfoEntity> findAllBySurnameIgnoreCaseAndNameIgnoreCase(String surname, String name);
 

@@ -101,6 +101,21 @@ public class RegistrationInfoService {
   }
 
   @Transactional(readOnly = true)
+  public List<RegistrationInfo> getRegistrationInfoByRange(LocalDate startDate, LocalDate endDate) {
+
+    List<RegistrationInfoEntity> allByReceiveDate =
+        repository.findAllByReceiveDateIsGreaterThanEqual(startDate).stream()
+            .filter(r -> r.getReceiveDate().isBefore(endDate))
+            .collect(Collectors.toList());
+
+    log.info("Found registrationInfos count={}, by the range startDate={} and endDate={}", allByReceiveDate.size(), startDate, endDate);
+
+    return allByReceiveDate.stream()
+        .map(RegistrationInfoMapper.INSTANCE::toDto)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional(readOnly = true)
   public List<String> getAvailableStreamsByDate(LocalDate localDate) {
 
     List<RegistrationInfoEntity> registrationsForms = repository.findAllByReceiveDate(localDate);

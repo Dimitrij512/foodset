@@ -118,9 +118,48 @@ public class RegistrationInfoController {
     return "registrationInfos";
   }
 
+  @GetMapping("/registration-infos-by-range")
+  public String getRegistrationInfosWithRange(@RequestParam(name = "startDate", required = false)
+                                              @DateTimeFormat(pattern = "yyyy-mm-dd")
+                                              LocalDate startDate,
+                                              @RequestParam(name = "startDate", required = false)
+                                              @DateTimeFormat(pattern = "yyyy-mm-dd")
+                                              LocalDate endDate,
+                                              Model model) {
+
+    LocalDate start = startDate == null ? LocalDate.now() : startDate;
+    LocalDate end = endDate == null ? LocalDate.now() : endDate;
+
+    List<RegistrationInfo> registrationInfos =
+        registrationInfoService.getRegistrationInfoByRange(start, end);
+
+    model.addAttribute("registrationInfos", registrationInfos);
+
+    return "registrationInfos";
+  }
+
+  @GetMapping("/registration-infos-content-by-range")
+  @ResponseBody
+  public List<RegistrationInfo> getRegistrationInfosContentWithRange(
+      @RequestParam(name = "startDate")
+      String startDate,
+      @RequestParam(name = "endDate")
+      String endDate) {
+
+    LocalDate start = StringUtils.isBlank(startDate) ? LocalDate.now() : LocalDate.parse(startDate);
+    LocalDate end = StringUtils.isBlank(endDate) ? LocalDate.now() : LocalDate.parse(endDate);
+
+    List<RegistrationInfo> registrationInfoByDate =
+        registrationInfoService.getRegistrationInfoByRange(start, end);
+
+    log.info("Found registrations info with count={}", registrationInfoByDate.size());
+
+    return registrationInfoByDate;
+  }
+
   @GetMapping("/registration-infos-content")
   @ResponseBody
-  public List<RegistrationInfo> getRegistrationInfosContent(
+  public List<RegistrationInfo> getRegistrationInfosContentWithRange(
       @RequestParam(name = "receiveDate", required = false)
       String receiveDate) {
 
@@ -146,38 +185,18 @@ public class RegistrationInfoController {
     return registrationInfoService.getAvailableStreamsByDate(LocalDate.parse(receiveDate));
   }
 
-  @GetMapping("/registration-infos/generate-pdf-file")
-  public void generatePdfFile(@RequestParam(name = "receiveDate", required = false)
-                              String receiveDate,
-                              HttpServletResponse response) throws IOException {
-
-    LocalDate date = receiveDate == null ? LocalDate.now() : LocalDate.parse(receiveDate);
-
-    List<RegistrationInfo> registrationInfos =
-        registrationInfoService.getRegistrationInfoByDate(date).stream()
-            .sorted(Comparator.comparing(RegistrationInfo::getSurname))
-            .collect(Collectors.toList());
-
-    response.setContentType("application/pdf");
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss");
-
-    String currentDateTime = dateFormat.format(new Date());
-
-    response.setHeader("Content-Disposition",
-        "attachment; filename=registrations-infos" + currentDateTime + ".pdf");
-
-    pdfGeneratorService.generate(registrationInfos, response);
-  }
-
   @GetMapping("/registration-infos/generate-excel-file")
-  public void generateExcelFile(@RequestParam(name = "receiveDate", required = false)
-                              String receiveDate,
-                              HttpServletResponse response) {
+  public void generateExcelFile(@RequestParam(name = "startDate", required = false)
+                                String startDate,
+                                @RequestParam(name = "endDate", required = false)
+                                String endDate,
+                                HttpServletResponse response) {
 
-    LocalDate date = receiveDate == null ? LocalDate.now() : LocalDate.parse(receiveDate);
+    LocalDate start = StringUtils.isBlank(startDate) ? LocalDate.now() : LocalDate.parse(startDate);
+    LocalDate end = StringUtils.isBlank(endDate) ? LocalDate.now() : LocalDate.parse(endDate);
 
     List<RegistrationInfo> registrationInfos =
-        registrationInfoService.getRegistrationInfoByDate(date).stream()
+        registrationInfoService.getRegistrationInfoByRange(start, end).stream()
             .sorted(Comparator.comparing(RegistrationInfo::getSurname))
             .collect(Collectors.toList());
 
