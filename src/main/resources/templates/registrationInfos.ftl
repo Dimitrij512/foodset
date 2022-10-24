@@ -119,9 +119,11 @@
             $.get("/registration-infos-content-by-range/?startDate=" + startDate + "&endDate=" + endDate, function (response) {
 
                 $(".reg-info-table-body").empty();
-                response.forEach(function(refugeesInfo) {
+                $(response).each(function(index, refugeesInfo) {
+                   index = index + 1;
                    let html =
                         '<tr>'
+                        + '<td>' + index + '</td>'
                         + '<td>' + refugeesInfo.receiveDate + '</td>'
                         + '<td>' + refugeesInfo.stream + '</td>'
                         + '<td>' + refugeesInfo.phoneNumber + '</td>'
@@ -219,6 +221,7 @@
             <table class="table" id="infos-table-id">
                 <thead>
                 <tr class="filters">
+                    <th><input type="text" class="form-control" placeholder="№" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Дата" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Потік" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Телефон" disabled></th>
@@ -232,6 +235,7 @@
                 <tbody class="reg-info-table-body">
                 <#list registrationInfos as registrationInfo>
                     <tr>
+                        <td>${registrationInfo?index}</td>
                         <td>${registrationInfo.receiveDate}</td>
                         <td>${registrationInfo.stream}</td>
                         <td>${registrationInfo.phoneNumber}</td>
