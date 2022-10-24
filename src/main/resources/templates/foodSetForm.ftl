@@ -202,7 +202,7 @@
 <script>
     $(document).ready(function () {
         let oneWeekFuture = new Date();
-        oneWeekFuture.setDate(oneWeekFuture.getDate() + 7);
+        oneWeekFuture.setDate(oneWeekFuture.getDate() + 5);
 
         $('#date').datepicker({
             showAnim: "fold",
