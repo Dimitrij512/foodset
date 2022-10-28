@@ -45,7 +45,7 @@ public class RegistrationInfoService {
         .stream().max((e1, e2) -> e2.getReceiveDate().compareTo(e1.getReceiveDate()));
 
     if((!latestRegistrationInfo.isPresent())
-        || isLatestReceivedDateBiggerThanTwoWeeks(latestRegistrationInfo.get().getReceiveDate())) {
+        || isLatestReceivedDateBiggerThanThreeWeeks(latestRegistrationInfo.get().getReceiveDate())) {
 
       RegistrationInfoEntity regInfo =
           repository.save(RegistrationInfoMapper.INSTANCE.toEntity(registrationInfo));
@@ -141,8 +141,8 @@ public class RegistrationInfoService {
     return "Так".equals(receiveString);
   }
 
-  private boolean isLatestReceivedDateBiggerThanTwoWeeks(LocalDate latestReceivedDate) {
-    LocalDate weeksFromLatestReceivedDate = latestReceivedDate.plusWeeks(2);
+  private boolean isLatestReceivedDateBiggerThanThreeWeeks(LocalDate latestReceivedDate) {
+    LocalDate weeksFromLatestReceivedDate = latestReceivedDate.plusWeeks(3);
     LocalDate today = LocalDate.now();
 
     return today.isEqual(weeksFromLatestReceivedDate) || today.isAfter(weeksFromLatestReceivedDate);
