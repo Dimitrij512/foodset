@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -37,19 +37,20 @@ public class RegistrationInfoService {
 
    private final RegistrationInfoRepository repository;
 
+  CacheStore<RegistrationInfoEntity> registrationInfoCache;
+
   @Transactional
   public Pair<String, String> registerForm(RegistrationInfo registrationInfo) {
 
-    Optional<RegistrationInfoEntity> latestRegistrationInfo = repository.
-        findAllBySurnameIgnoreCaseAndNameIgnoreCase(registrationInfo.getSurname(), registrationInfo.getName())
-        .stream().max((e1, e2) -> e2.getReceiveDate().compareTo(e1.getReceiveDate()));
+    RegistrationInfoEntity latestRegistrationInfo
+        = registrationInfoCache.get(registrationInfo.getSurname(), registrationInfo.getName());
 
-    if((!latestRegistrationInfo.isPresent())
-        || isLatestReceivedDateBiggerThanThreeWeeks(latestRegistrationInfo.get().getReceiveDate())) {
+    if((Objects.isNull(latestRegistrationInfo))
+        || isLatestReceivedDateBiggerThanThreeWeeks(latestRegistrationInfo.getReceiveDate())) {
 
       RegistrationInfoEntity regInfo =
           repository.save(RegistrationInfoMapper.INSTANCE.toEntity(registrationInfo));
-      log.info("Registered form by id={}", regInfo.getId());
+      registrationInfoCache.add(regInfo.getSurname(), registrationInfo.getName(), regInfo);
 
       emailService.sendMail(registrationInfo.getEmail(),
           registrationInfo.getReceiveDate(),
@@ -62,7 +63,7 @@ public class RegistrationInfoService {
         format("Перевищена кількікість реєстрацій. \n" +
                 "Орієнтована дата \n" +
                 "наступної реєстрації %s",
-            latestRegistrationInfo.get().getReceiveDate().plusWeeks(2)));
+            latestRegistrationInfo.getReceiveDate().plusWeeks(3)));
   }
 
   @Transactional
@@ -75,10 +76,8 @@ public class RegistrationInfoService {
   @Transactional
   public void updateForm(String id, UpdateRegistrationInfoRequest request) {
 
-    if(!repository.existsById(id)) {
-      throw new IllegalArgumentException(format("Not found registrationInfo by id=%s", id));
-    }
-    RegistrationInfoEntity entityById = repository.findById(id).get();
+    RegistrationInfoEntity entityById = repository.findById(id).orElseThrow(() ->
+        new IllegalArgumentException(format("Not found registrationInfo by id=%s", id)));
     entityById.setReceive(getReceived(request.getReceived()));
     entityById.setComment(request.getComment());
 

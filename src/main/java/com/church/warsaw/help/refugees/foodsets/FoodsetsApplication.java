@@ -1,6 +1,9 @@
 package com.church.warsaw.help.refugees.foodsets;
 
+import com.church.warsaw.help.refugees.foodsets.entity.RegistrationInfoEntity;
+import com.church.warsaw.help.refugees.foodsets.service.CacheStore;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
@@ -40,6 +43,11 @@ public class FoodsetsApplication {
     ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
     messageSource.setBasename("validationMessage");
     return messageSource;
+  }
+
+  @Bean
+  public CacheStore<RegistrationInfoEntity> registrationInfoCache() {
+    return new CacheStore<>(21, TimeUnit.DAYS);
   }
 
   @Bean
