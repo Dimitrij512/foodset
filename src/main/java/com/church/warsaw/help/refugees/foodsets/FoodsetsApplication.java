@@ -1,12 +1,8 @@
 package com.church.warsaw.help.refugees.foodsets;
 
+import com.church.warsaw.help.refugees.foodsets.config.FoodSetConfiguration;
 import com.church.warsaw.help.refugees.foodsets.entity.RegistrationInfoEntity;
 import com.church.warsaw.help.refugees.foodsets.service.CacheStore;
-import java.util.Properties;
-import java.util.concurrent.TimeUnit;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,6 +16,12 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
 @EnableWebMvc
 @EnableMongoAuditing
 @ConfigurationPropertiesScan("com.church.warsaw.help.refugees.foodsets")
@@ -27,68 +29,71 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @AllArgsConstructor
 public class FoodsetsApplication {
 
-  private final Environment environment;
+    private final Environment environment;
 
-  public static void main(String[] args) {
-    SpringApplication.run(FoodsetsApplication.class, args);
-  }
+    private final FoodSetConfiguration foodSetConfiguration;
 
-  @Bean
-  public BCryptPasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(FoodsetsApplication.class, args);
+    }
 
-  @Bean
-  public MessageSource messageSource() {
-    ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-    messageSource.setBasename("validationMessage");
-    return messageSource;
-  }
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-  @Bean
-  public CacheStore<RegistrationInfoEntity> registrationInfoCache() {
-    return new CacheStore<>(21, TimeUnit.DAYS);
-  }
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("validationMessage");
+        return messageSource;
+    }
 
-  @Bean
-  public Session javaMailSenderImpl() {
+    @Bean
+    public CacheStore<RegistrationInfoEntity> registrationInfoCache() {
+        int weeks = foodSetConfiguration.getReceiveOnceForWeeks();
+        return new CacheStore<>((weeks * 7), TimeUnit.DAYS);
+    }
 
-    JavaMailSenderImpl mailSenderImpl = new JavaMailSenderImpl();
+    @Bean
+    public Session javaMailSenderImpl() {
 
-    String emailHost = environment.getRequiredProperty("email.host");
-    String emailPort = environment.getRequiredProperty("email.port");
-    String userName = environment.getRequiredProperty("email.username");
-    String userPassword = environment.getRequiredProperty("email.password");
+        JavaMailSenderImpl mailSenderImpl = new JavaMailSenderImpl();
 
-    mailSenderImpl.setHost(emailHost);
-    mailSenderImpl.setPort(Integer.parseInt(emailPort));
-    mailSenderImpl.setUsername(userName);
-    mailSenderImpl.setPassword(userPassword);
+        String emailHost = environment.getRequiredProperty("email.host");
+        String emailPort = environment.getRequiredProperty("email.port");
+        String userName = environment.getRequiredProperty("email.username");
+        String userPassword = environment.getRequiredProperty("email.password");
 
-    Properties properties = System.getProperties();
+        mailSenderImpl.setHost(emailHost);
+        mailSenderImpl.setPort(Integer.parseInt(emailPort));
+        mailSenderImpl.setUsername(userName);
+        mailSenderImpl.setPassword(userPassword);
 
-    properties.put("mail.smtp.host", emailHost);
-    properties.put("mail.smtp.port", emailPort);
-    properties.put("mail.smtp.ssl.enable", "true");
-    properties.put("mail.transport.protocol", "smtp");
-    properties.put("mail.smtp.auth", "true");
+        Properties properties = System.getProperties();
 
-    return Session.getInstance(properties, new javax.mail.Authenticator() {
+        properties.put("mail.smtp.host", emailHost);
+        properties.put("mail.smtp.port", emailPort);
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.transport.protocol", "smtp");
+        properties.put("mail.smtp.auth", "true");
 
-      @Override
-      protected PasswordAuthentication getPasswordAuthentication() {
+        return Session.getInstance(properties, new javax.mail.Authenticator() {
 
-        return new PasswordAuthentication(userName, userPassword);
-      }
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
 
-    });
-  }
+                return new PasswordAuthentication(userName, userPassword);
+            }
 
-  @Bean
-  public MimeMessage mimeMessage(Session session) {
+        });
+    }
 
-    return new MimeMessage(session);
-  }
+    @Bean
+    public MimeMessage mimeMessage(Session session) {
+
+        return new MimeMessage(session);
+    }
 
 }
 

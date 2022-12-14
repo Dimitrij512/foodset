@@ -1,7 +1,5 @@
 package com.church.warsaw.help.refugees.foodsets.service;
 
-import static java.lang.String.format;
-
 import com.church.warsaw.help.refugees.foodsets.config.FoodSetConfiguration;
 import com.church.warsaw.help.refugees.foodsets.controller.UpdateRegistrationInfoRequest;
 import com.church.warsaw.help.refugees.foodsets.dto.RegistrationInfo;
@@ -9,20 +7,18 @@ import com.church.warsaw.help.refugees.foodsets.email.EmailService;
 import com.church.warsaw.help.refugees.foodsets.entity.RegistrationInfoEntity;
 import com.church.warsaw.help.refugees.foodsets.mapper.RegistrationInfoMapper;
 import com.church.warsaw.help.refugees.foodsets.repository.RegistrationInfoRepository;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.lang.String.format;
 
 @Slf4j
 @AllArgsConstructor
@@ -39,6 +35,7 @@ public class RegistrationInfoService {
 
   CacheStore<RegistrationInfoEntity> registrationInfoCache;
 
+
   @Transactional
   public Pair<String, String> registerForm(RegistrationInfo registrationInfo) {
 
@@ -46,7 +43,7 @@ public class RegistrationInfoService {
         = registrationInfoCache.get(registrationInfo.getSurname(), registrationInfo.getName());
 
     if((Objects.isNull(latestRegistrationInfo))
-        || isLatestReceivedDateBiggerThanThreeWeeks(latestRegistrationInfo.getReceiveDate())) {
+        || isLatestReceivedDateBiggerThanExpectedWeeks(latestRegistrationInfo.getReceiveDate())) {
 
       RegistrationInfoEntity regInfo =
           repository.save(RegistrationInfoMapper.INSTANCE.toEntity(registrationInfo));
@@ -140,8 +137,8 @@ public class RegistrationInfoService {
     return "Так".equals(receiveString);
   }
 
-  private boolean isLatestReceivedDateBiggerThanThreeWeeks(LocalDate latestReceivedDate) {
-    LocalDate weeksFromLatestReceivedDate = latestReceivedDate.plusWeeks(3);
+  private boolean isLatestReceivedDateBiggerThanExpectedWeeks(LocalDate latestReceivedDate) {
+    LocalDate weeksFromLatestReceivedDate = latestReceivedDate.plusWeeks(foodSetConfiguration.getReceiveOnceForWeeks());
     LocalDate today = LocalDate.now();
 
     return today.isEqual(weeksFromLatestReceivedDate) || today.isAfter(weeksFromLatestReceivedDate);
