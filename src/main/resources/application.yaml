@@ -22,14 +22,14 @@ food-set-form:
     "14-00": 0
   tuesday-configuration:
     "11-00": 0
-    "12-00": 100
+    "12-00": 0
     "14-00": 0
   wednesday-configuration:
     "11-00": 0
     "14-00": 0
   thursday-configuration:
     "11-00": 0
-    "12-00": 100
+    "12-00": 0
     "14-00": 0
   friday-configuration:
     "11-00": 0
