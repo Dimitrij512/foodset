@@ -3,12 +3,10 @@ package com.church.warsaw.help.refugees.foodsets.controller;
 import static com.church.warsaw.help.refugees.foodsets.service.RegistrationInfoService.HAS_ERROR_KEY;
 
 import com.church.warsaw.help.refugees.foodsets.docgenerator.ExcelGeneratorService;
-import com.church.warsaw.help.refugees.foodsets.docgenerator.PdfGeneratorService;
 import com.church.warsaw.help.refugees.foodsets.dto.RegistrationInfo;
 import com.church.warsaw.help.refugees.foodsets.service.RegistrationInfoService;
 import com.church.warsaw.help.refugees.foodsets.validator.DataValidator;
 import com.church.warsaw.help.refugees.foodsets.validator.ValidationResult;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -45,8 +43,6 @@ public class RegistrationInfoController {
   private final DataValidator dataValidator;
 
   private final RegistrationInfoService registrationInfoService;
-
-  private final PdfGeneratorService pdfGeneratorService;
   private final ExcelGeneratorService excelGeneratorService;
 
   @GetMapping("/food-set-form")

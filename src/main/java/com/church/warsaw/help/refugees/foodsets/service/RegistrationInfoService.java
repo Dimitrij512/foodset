@@ -33,6 +33,9 @@ public class RegistrationInfoService {
 
    private final RegistrationInfoRepository repository;
 
+
+   private final ConfigService configService;
+
   CacheStore<RegistrationInfoEntity> registrationInfoCache;
 
 
@@ -114,6 +117,11 @@ public class RegistrationInfoService {
 
   @Transactional(readOnly = true)
   public List<String> getAvailableStreamsByDate(LocalDate localDate) {
+
+    if (!configService.isDateAvailable(localDate)) {
+      log.info("Date = {} is not available for registration", localDate);
+      return Collections.emptyList();
+    }
 
     List<RegistrationInfoEntity> registrationsForms = repository.findAllByReceiveDate(localDate);
     Map<String, Integer> streamWithCountByDay = getStreamsWithCount(localDate);

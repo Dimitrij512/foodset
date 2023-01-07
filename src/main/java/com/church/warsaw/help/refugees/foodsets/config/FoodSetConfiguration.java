@@ -18,12 +18,10 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "food-set-form")
 public class FoodSetConfiguration {
   int receiveOnceForWeeks;
-
   Map<String, Integer> mondayConfiguration;
   Map<String, Integer> tuesdayConfiguration;
   Map<String, Integer> wednesdayConfiguration;
   Map<String, Integer> thursdayConfiguration;
   Map<String, Integer> fridayConfiguration;
-
 
 }

@@ -51,6 +51,10 @@
             window.location.href='/registration-infos/create/free';
         });
 
+        $('#configuration-info').click(function () {
+            window.location.href='/configuration';
+        });
+
         document.getElementById('date-from').value = new Date().toISOString().split('T')[0];
         document.getElementById('date-to').value = new Date().toISOString().split('T')[0];
 
@@ -208,6 +212,11 @@
                 <div class="pull-right" style="margin-right: 2px">
                     <button class="btn btn-default btn-xs" id="create-registration-info"><span class="glyphicon glyphicon-plus"></span>
                         Додати
+                    </button>
+                </div>
+                <div class="pull-right" style="margin-right: 2px">
+                    <button class="btn btn-default btn-xs" id="configuration-info"><span class="glyphicon glyphicon-flash"></span>
+                        Налаштувати
                     </button>
                 </div>
                 <div class="pull-right input-group" style="margin-right: 2px">
