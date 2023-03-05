@@ -361,6 +361,7 @@
                 <div class="checkbox-container"></div>
                 Комплексний обід
             </label>
+            <b>Я зобов'язуюсь підтвердити дані документально (копія або оригінал документів).</b>
         </fieldset>
         <button type="submit">Надіслати</button>
 

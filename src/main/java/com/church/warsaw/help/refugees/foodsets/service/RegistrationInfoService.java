@@ -63,7 +63,7 @@ public class RegistrationInfoService {
         format("Перевищена кількікість реєстрацій. \n" +
                 "Орієнтована дата \n" +
                 "наступної реєстрації %s",
-            latestRegistrationInfo.getReceiveDate().plusWeeks(3)));
+            latestRegistrationInfo.getReceiveDate().plusWeeks(foodSetConfiguration.getReceiveOnceForWeeks())));
   }
 
   @Transactional
