@@ -1,3 +1,4 @@
+
 spring:
   main:
     banner-mode: OFF
@@ -19,11 +20,11 @@ food-set-form:
 
   monday-configuration:
     "11-00": 0
-    "12-00": 0
-    "14-00": 70
+    "12-00": 80
+    "14-00": 0
   tuesday-configuration:
     "11-00": 0
-    "12-00": 0
+    "12-00": 70
     "14-00": 70
   wednesday-configuration:
     "11-00": 0
@@ -31,12 +32,12 @@ food-set-form:
     "14-00": 70
   thursday-configuration:
     "11-00": 0
-    "12-00": 0
+    "12-00": 70
     "14-00": 70
   friday-configuration:
     "11-00": 0
     "12-00": 0
-    "14-00": 70
+    "14-00": 0
 
 admin-user:
   username: "${USER_NAME:}"
@@ -52,3 +53,5 @@ email:
   port: "${EMAIL_PORT:}"
   username: "${EMAIL_USERNAME:}"
   password: "${EMAIL_PASSWORD:}"
+server:
+  port: 8181
