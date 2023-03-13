@@ -16,7 +16,7 @@ spring:
       database: "${MONGO_DB_DATABASE:}"
 
 food-set-form:
-  receive-once-for-weeks: 9
+  receive-once-for-weeks: 5
 
   monday-configuration:
     "11-00": 0
@@ -24,16 +24,16 @@ food-set-form:
     "14-00": 0
   tuesday-configuration:
     "11-00": 0
-    "12-00": 70
-    "14-00": 70
+    "12-00": 75
+    "14-00": 75
   wednesday-configuration:
     "11-00": 0
-    "12-00": 0
-    "14-00": 70
+    "12-00": 75
+    "14-00": 0
   thursday-configuration:
     "11-00": 0
-    "12-00": 70
-    "14-00": 70
+    "12-00": 75
+    "14-00": 75
   friday-configuration:
     "11-00": 0
     "12-00": 0
