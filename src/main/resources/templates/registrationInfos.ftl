@@ -39,6 +39,17 @@
 </style>
 
 <script>
+
+    function removeItem(registrationInfoId) {
+        console.log("Going to delete item by id = ", registrationInfoId)
+        $.ajax({
+            url: "/registration-infos/" + registrationInfoId,
+            type: 'DELETE'
+        });
+
+        document.getElementById(registrationInfoId).closest('tr').remove();
+    }
+
     $(document).ready(function () {
 
         $('#generate-xls').click(function () {
@@ -58,7 +69,8 @@
         document.getElementById('date-from').value = new Date().toISOString().split('T')[0];
         document.getElementById('date-to').value = new Date().toISOString().split('T')[0];
 
-        $('tbody').on('focus', 'button', function() {
+        $('tbody').on('click', 'button', function() {
+
             let saveButton = $(this).closest('tr').find('.reg-info-row-save');
             let editButton = $(this).closest('tr').find('.reg-info-row-edit');
 
@@ -126,8 +138,8 @@
                 $(response).each(function(index, refugeesInfo) {
                    index = index + 1;
                    let html =
-                        '<tr>'
-                        + '<td>' + index + '</td>'
+                        '<tr id="'+ refugeesInfo.id +'">'
+                        + '<td class="reg-info-index">' + index + '</td>'
                         + '<td>' + refugeesInfo.receiveDate + '</td>'
                         + '<td>' + refugeesInfo.stream + '</td>'
                         + '<td>' + refugeesInfo.phoneNumber + '</td>'
@@ -144,7 +156,8 @@
                         + '</td>'
                         + '<td class="info-id" style="display: none">' + refugeesInfo.id + '</td>'
                         + '<td><button id="edit" class="btn btn-default reg-info-row-edit" style="color:green;""><span class="glyphicon glyphicon-edit"></span></button></td>'
-                        + '<td><button id="save" class="btn btn-default reg-info-row-save" disabled><span class="glyphicon glyphicon-saved"></span></button></td>' +
+                        + '<td><button id="save" class="btn btn-default reg-info-row-save" disabled><span class="glyphicon glyphicon-saved"></span></button></td>'
+                        + '<td><button id="remove" onclick=removeItem("'+refugeesInfo.id+'") class="btn btn-default reg-info-row-remove"><span class="glyphicon glyphicon-remove"></span></button></td>' +
                        '</tr>';
 
                     $(".reg-info-table-body").append(html);
@@ -243,8 +256,8 @@
                 </thead>
                 <tbody class="reg-info-table-body">
                 <#list registrationInfos as registrationInfo>
-                    <tr>
-                        <td>${registrationInfo?index}</td>
+                    <tr id=${registrationInfo.id}>
+                        <td class="reg-info-index">${registrationInfo?index}</td>
                         <td>${registrationInfo.receiveDate}</td>
                         <td>${registrationInfo.stream}</td>
                         <td>${registrationInfo.phoneNumber}</td>
@@ -262,6 +275,7 @@
                         <td class='info-id' style="display:none">${registrationInfo.id}</td>
                         <td><button id="edit" class="btn btn-default reg-info-row-edit" style= color:green><span class="glyphicon glyphicon-edit"></span></button></td>
                         <td><button id="save" class="btn btn-default reg-info-row-save" disabled><span class="glyphicon glyphicon-saved"></span></button></td>
+                        <td><button id="remove" onclick="removeItem('${registrationInfo.id}')" class="btn btn-default reg-info-row-remove"><span class="glyphicon glyphicon-remove"></span></button></td>
                     </tr>
                 </#list>
                 </tbody>

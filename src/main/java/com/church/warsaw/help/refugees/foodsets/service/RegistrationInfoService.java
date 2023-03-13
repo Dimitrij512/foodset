@@ -141,6 +141,13 @@ public class RegistrationInfoService {
     return result;
   }
 
+  @Transactional
+  public void deleteFormById(String id) {
+    log.info("Going to delete registration info by id={}", id);
+    repository.deleteById(id);
+    log.info("RegistrationInfo by id={} has been delete successfully", id);
+  }
+
   private boolean getReceived(String receiveString) {
     return "Так".equals(receiveString);
   }
