@@ -26,13 +26,15 @@ public class ExcelGeneratorService {
       rowhead.createCell(0).setCellValue("No.");
       rowhead.createCell(1).setCellValue("Дата");
       rowhead.createCell(2).setCellValue("Час");
-      rowhead.createCell(3).setCellValue("Телефон");
-      rowhead.createCell(4).setCellValue("Електронна пошта");
-      rowhead.createCell(5).setCellValue("Фамілія");
-      rowhead.createCell(6).setCellValue("Ім'я");
-      rowhead.createCell(7).setCellValue("Члени сім'ї");
-      rowhead.createCell(8).setCellValue("Тип допомоги");
-      rowhead.createCell(9).setCellValue("Отримано");
+      rowhead.createCell(3).setCellValue("Телефон Пол.");
+      rowhead.createCell(4).setCellValue("Телефон Messanger.");
+      rowhead.createCell(5).setCellValue("Електронна пошта");
+      rowhead.createCell(6).setCellValue("Фамілія");
+      rowhead.createCell(7).setCellValue("Ім'я");
+      rowhead.createCell(8).setCellValue("Члени сім'ї");
+      rowhead.createCell(9).setCellValue("Категорія");
+      rowhead.createCell(10).setCellValue("Тип допомоги");
+      rowhead.createCell(11).setCellValue("Отримано");
 
       int count = 0;
       for (RegistrationInfo info : registrationInfos) {
@@ -45,12 +47,14 @@ public class ExcelGeneratorService {
         row.createCell(1).setCellValue(registrationInfo.getReceiveDate());
         row.createCell(2).setCellValue(registrationInfo.getStream());
         row.createCell(3).setCellValue(registrationInfo.getPhoneNumber());
-        row.createCell(4).setCellValue(registrationInfo.getEmail());
-        row.createCell(5).setCellValue(registrationInfo.getSurname());
-        row.createCell(6).setCellValue(registrationInfo.getName());
-        row.createCell(7).setCellValue(registrationInfo.getKidsCount());
-        row.createCell(8).setCellValue(registrationInfo.getTypeSet());
-        row.createCell(9).setCellValue(registrationInfo.getReceive());
+        row.createCell(4).setCellValue(registrationInfo.getPhoneNumberMessenger());
+        row.createCell(5).setCellValue(registrationInfo.getEmail());
+        row.createCell(6).setCellValue(registrationInfo.getSurname());
+        row.createCell(7).setCellValue(registrationInfo.getName());
+        row.createCell(8).setCellValue(registrationInfo.getKidsCount());
+        row.createCell(9).setCellValue(registrationInfo.getCategoriesAssistance());
+        row.createCell(10).setCellValue(registrationInfo.getTypeSet());
+        row.createCell(11).setCellValue(registrationInfo.getReceive());
       }
       autoSizeColumns(workbook);
       workbook.write(response.getOutputStream());

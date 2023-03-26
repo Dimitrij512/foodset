@@ -41,7 +41,6 @@
 <script>
 
     function removeItem(registrationInfoId) {
-        console.log("Going to delete item by id = ", registrationInfoId)
         $.ajax({
             url: "/registration-infos/" + registrationInfoId,
             type: 'DELETE'
@@ -143,9 +142,11 @@
                         + '<td>' + refugeesInfo.receiveDate + '</td>'
                         + '<td>' + refugeesInfo.stream + '</td>'
                         + '<td>' + refugeesInfo.phoneNumber + '</td>'
+                        + '<td>' + refugeesInfo.phoneNumberMessenger + '</td>'
                         + '<td>' + refugeesInfo.surname + '</td>'
                         + '<td>' + refugeesInfo.name + '</td>'
                         + '<td>' + refugeesInfo.kidsCount + '</td>'
+                        + '<td>' + refugeesInfo.categoriesAssistance + '</td>'
                         + '<td>' + refugeesInfo.typeSet + '</td>'
                         + '<td class="is-receive-row">'
                               + '<select disabled class="is-receive-row-select">'
@@ -247,9 +248,11 @@
                     <th><input type="text" class="form-control" placeholder="Дата" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Потік" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Телефон" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Messanger" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Фамілія" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Ім'я" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Члени сім'ї" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Категорія" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Тип" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Видано" disabled></th>
                 </tr>
@@ -261,9 +264,11 @@
                         <td>${registrationInfo.receiveDate}</td>
                         <td>${registrationInfo.stream}</td>
                         <td>${registrationInfo.phoneNumber}</td>
+                        <td>${registrationInfo.phoneNumberMessenger}</td>
                         <td>${registrationInfo.surname}</td>
                         <td>${registrationInfo.name}</td>
                         <td>${registrationInfo.kidsCount}</td>
+                        <td>${registrationInfo.categoriesAssistance}</td>
                         <td>${registrationInfo.typeSet}</td>
                         <td class='is-received-row'>
                             <select disabled  class="is-receive-row-select">

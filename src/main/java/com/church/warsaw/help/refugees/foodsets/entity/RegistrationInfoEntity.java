@@ -1,5 +1,6 @@
 package com.church.warsaw.help.refugees.foodsets.entity;
 
+import com.church.warsaw.help.refugees.foodsets.CategoryOfAssistance;
 import com.church.warsaw.help.refugees.foodsets.TypeSet;
 import java.time.LocalDate;
 import lombok.Getter;
@@ -26,6 +27,8 @@ public class RegistrationInfoEntity extends BaseEntity {
   int kidsCount;
 
   TypeSet typeSet;
+
+  CategoryOfAssistance categoriesAssistance;
 
   boolean receive;
 

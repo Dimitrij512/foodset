@@ -252,6 +252,17 @@
             <input type="number" required placeholder="телефон"
                    id="phone_number" name="phoneNumber">
 
+
+            <label for="categories_for_receiving_assistance">Категорії для отримання допомоги:</label>
+            <select id="categories_for_receiving_assistance" name="categoriesAssistance">
+                <option value="">виберіть категорію допомоги</option>
+                <option value="LARGE_FAMILY">багатодітна сім'я (від 3х дітей)</option>
+                <option value="PENSIONERS">люди пенсійного віку (60+)</option>
+                <option value="DISABLED_PEOPLE">особи непрацездатні (інваліди) або їх опікуни</option>
+                <option value="REFUGEES">люди, які приїхали з окупованих територій (з січня 2023р.)</option>
+                <option value="CHILD_UNDER_ONE_YEAR">матері, які мають дітей віком до 1 року</option>
+            </select>
+
             <label for="kids_count">Кількість членів сім'ї:</label>
             <select id="kids_count" name="kidsCount">
                 <option value="1">1</option>
@@ -274,6 +285,12 @@
                 <div class="checkbox-container"></div>
                 Комплексний обід
             </label>
+            <label for="chemistry" class="light">
+                <input type="radio" id="chemistry" value="CHEMISTRY" name="typeSet">
+                <div class="checkbox-container"></div>
+                Набір хімії для мам, які мають дітей до 1 року
+            </label>
+
             <input type="text" hidden value="00-00" name="stream">
         </fieldset>
         <button type="submit">Зареєструвати</button>

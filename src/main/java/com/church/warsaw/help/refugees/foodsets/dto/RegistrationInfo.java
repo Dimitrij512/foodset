@@ -56,6 +56,9 @@ public class RegistrationInfo {
   @NotBlank(message = "ви не вказали тип набору")
   String typeSet;
 
+  @NotBlank(message = "ви не вказали категорію допомоги")
+  String categoriesAssistance;
+
   @Builder.Default
   String receive = "Ні";
 
