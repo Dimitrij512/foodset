@@ -22,17 +22,24 @@ public interface RegistrationInfoMapper {
   @Mapping(source = "receiveDate", target = "receiveDate", qualifiedByName = "receiveDateToString")
   @Mapping(source = "typeSet", target = "typeSet", qualifiedByName = "typeSetString")
   @Mapping(source = "categoriesAssistance", target = "categoriesAssistance", qualifiedByName = "categoriesAssistanceString")
+  @Mapping(source = "phoneNumberMessenger", target = "phoneNumberMessenger", qualifiedByName = "phoneNumberMessengerNonNull")
   RegistrationInfo toDto(RegistrationInfoEntity registrationInfoEntity);
 
   @Mapping(source = "receive", target = "receive", qualifiedByName = "receiveToBoolean")
   @Mapping(source = "receiveDate", target = "receiveDate", qualifiedByName = "receiveDateLocalDate")
   @Mapping(source = "typeSet", target = "typeSet", qualifiedByName = "typeSetEnum")
   @Mapping(source = "categoriesAssistance", target = "categoriesAssistance", qualifiedByName = "categoriesAssistanceEnum")
+  @Mapping(source = "phoneNumberMessenger", target = "phoneNumberMessenger", qualifiedByName = "phoneNumberMessengerNonNull")
   RegistrationInfoEntity toEntity(RegistrationInfo registrationInfo);
 
   @Named("typeSetEnum")
   static TypeSet getTypeSet(String typeSet) {
     return TypeSet.valueOf(typeSet);
+  }
+
+  @Named("phoneNumberMessengerNonNull")
+  static String getPhoneNumberMessenger(String phoneNumberMessenger) {
+    return phoneNumberMessenger == null ? StringUtils.EMPTY : phoneNumberMessenger;
   }
 
   @Named("categoriesAssistanceEnum")

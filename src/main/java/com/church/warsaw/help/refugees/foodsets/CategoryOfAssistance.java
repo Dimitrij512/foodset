@@ -8,7 +8,6 @@ public enum CategoryOfAssistance {
     REFUGEES("біженці з січня 2023р."),
     CHILD_UNDER_ONE_YEAR ("діти віком до 1 року");
 
-
     private final String categoryName;
 
     CategoryOfAssistance(String categoryName) {
