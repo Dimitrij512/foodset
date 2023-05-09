@@ -39,6 +39,29 @@ public class RegistrationInfoController {
   private final RegistrationInfoService registrationInfoService;
   private final ExcelGeneratorService excelGeneratorService;
 
+  @GetMapping("/auth/v2")
+  @ResponseBody
+  public String authv2(@RequestParam(name = "code", required = false) String code) {
+    System.out.println(code);
+    log.info("AUTH code: {}", code);
+
+    return code;
+  }
+
+  @GetMapping("/token/auth/v2")
+  @ResponseBody
+  public String authv2Token(@RequestParam(name = "access_token", required = false)
+                              String access_token,
+                            @RequestParam(name = "token_type", required = false)
+                            String token_type,
+                            @RequestParam(name = "expires_in", required = false)
+                              String expires_in,
+                            @RequestParam(name = "scope", required = false)
+                              String scope) {
+
+    return access_token;
+  }
+
   @GetMapping("/food-set-form")
   public String foodSetFormPage() {
 
