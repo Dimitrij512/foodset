@@ -206,7 +206,6 @@
         let availableDates = [];
 
         $.get("/configuration/available-dates", function(data){
-            console.log("RESPONSE: ", data)
             availableDates = data;
             printAvailableDatesHTML();
         });

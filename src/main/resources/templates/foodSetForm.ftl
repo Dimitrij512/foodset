@@ -201,6 +201,11 @@
 
 <script>
     $(document).ready(function () {
+        let availableDates = [];
+        $.get("/configuration/available-dates", function(data){
+            availableDates = data;
+        });
+
         let oneWeekFuture = new Date();
         oneWeekFuture.setDate(oneWeekFuture.getDate() + 6);
 
@@ -221,10 +226,19 @@
 
         $('#date').change("changeDate", function () {
             let selectedDate = $('#date').val();
+
             $.get("/registration-infos/stream-of-delivery/?receiveDate=" + selectedDate, function (response) {
 
                 if (!$.trim(response)) {
-                    $('#registration-closed').removeAttr('hidden');
+
+                    if(availableDates.includes(selectedDate)) {
+                        $('#registration-closed').removeAttr('hidden');
+                        $('#registration-not-opened').attr("hidden", true);
+                    } else {
+                        $('#registration-not-opened').removeAttr("hidden");
+                        $('#registration-closed').attr("hidden", true);
+                    }
+
                     $('#stream-of-delivery').attr("hidden", true);
                     $('#user-info').attr("hidden", true);
 
@@ -234,6 +248,7 @@
                         $("#time").append($('<option>', {value: streamOfDelivery, text: streamOfDelivery}));
                     })
                     $('#registration-closed').attr("hidden", true);
+                    $('#registration-not-opened').attr("hidden", true);
                     $('#stream-of-delivery').removeAttr('hidden');
                     $('#user-info').removeAttr('hidden');
                 }
@@ -243,6 +258,7 @@
 
     $('#submit-registration-form').submit(function () {
         $('#registration-closed').attr("hidden", true);
+        $('#registration-not-opened').attr("hidden", true);
         $('#error-notification').attr("hidden", true);
     });
 
@@ -292,6 +308,11 @@
                 <option selected value="<#if registrationInfo??>${registrationInfo.stream}<#else></#if>"/>
                 </option>
             </select>
+        </div>
+        <div id="registration-not-opened" hidden>
+            <div>
+                <h5 class="text-danger">На дану дату реєстрація не відкрита </h5>
+            </div>
         </div>
         <div id="registration-closed" hidden>
             <div>
@@ -366,11 +387,11 @@
                 <div class="checkbox-container"></div>
                 Продуктовий набір
             </label>
-            <label for="complex_dinner" class="light">
-                <input type="radio" id="complex_dinner" value="COMPLEX_DINNER" name="typeSet">
-                <div class="checkbox-container"></div>
-                Комплексний обід
-            </label>
+<#--            <label for="complex_dinner" class="light">-->
+<#--                <input type="radio" id="complex_dinner" value="COMPLEX_DINNER" name="typeSet">-->
+<#--                <div class="checkbox-container"></div>-->
+<#--                Комплексний обід-->
+<#--            </label>-->
             <label for="chemistry" class="light">
                 <input type="radio" id="chemistry" value="CHEMISTRY" name="typeSet">
                 <div class="checkbox-container"></div>

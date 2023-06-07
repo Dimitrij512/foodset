@@ -33,6 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/registration-infos/create",
             "/registration-infos/stream-of-delivery/**",
             "/food-set-form/success",
+            "/configuration/available-dates",
             "/food-set-form").permitAll()
         .anyRequest().authenticated()
         .and()
