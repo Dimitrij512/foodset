@@ -24,8 +24,8 @@ food-set-form:
     "14-00": 0
   tuesday-configuration:
     "11-00": 0
-    "12-00": 80
-    "14-00": 0
+    "12-00": 0
+    "14-00": 80
   wednesday-configuration:
     "11-00": 0
     "12-00": 75
@@ -33,7 +33,7 @@ food-set-form:
   thursday-configuration:
     "11-00": 0
     "12-00": 80
-    "14-00": 0
+    "14-00": 80
   friday-configuration:
     "11-00": 0
     "12-00": 0
