@@ -20,20 +20,20 @@ food-set-form:
 
   monday-configuration:
     "11-00": 0
-    "12-00": 60
-    "14-00": 0
+    "12-00": 0
+    "14-00": 60
   tuesday-configuration:
     "11-00": 0
-    "12-00": 60
-    "14-00": 0
+    "12-00": 0
+    "14-00": 60
   wednesday-configuration:
     "11-00": 0
-    "12-00": 60
-    "14-00": 0
+    "12-00": 0
+    "14-00": 60
   thursday-configuration:
     "11-00": 0
-    "12-00": 60
-    "14-00": 0
+    "12-00": 0
+    "14-00": 60
   friday-configuration:
     "11-00": 0
     "12-00": 0
