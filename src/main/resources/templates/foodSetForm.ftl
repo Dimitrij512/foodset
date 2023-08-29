@@ -392,11 +392,11 @@
 <#--                <div class="checkbox-container"></div>-->
 <#--                Комплексний обід-->
 <#--            </label>-->
-            <label for="chemistry" class="light">
-                <input type="radio" id="chemistry" value="CHEMISTRY" name="typeSet">
-                <div class="checkbox-container"></div>
-                Набір хімії для мам, які мають дітей до 1 року
-            </label>
+<#--            <label for="chemistry" class="light">-->
+<#--                <input type="radio" id="chemistry" value="CHEMISTRY" name="typeSet">-->
+<#--                <div class="checkbox-container"></div>-->
+<#--                Набір хімії для мам, які мають дітей до 1 року-->
+<#--            </label>-->
             <b>Я зобов'язуюсь підтвердити дані документально (копія або оригінал документів).</b>
             <br>
             <br>

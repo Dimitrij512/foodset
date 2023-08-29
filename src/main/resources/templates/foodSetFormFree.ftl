@@ -280,16 +280,16 @@
                 <div class="checkbox-container"></div>
                 Продуктовий набір
             </label>
-            <label for="complex_dinner" class="light">
-                <input type="radio" id="complex_dinner" value="COMPLEX_DINNER" name="typeSet">
-                <div class="checkbox-container"></div>
-                Комплексний обід
-            </label>
-            <label for="chemistry" class="light">
-                <input type="radio" id="chemistry" value="CHEMISTRY" name="typeSet">
-                <div class="checkbox-container"></div>
-                Набір хімії для мам, які мають дітей до 1 року
-            </label>
+<#--            <label for="complex_dinner" class="light">-->
+<#--                <input type="radio" id="complex_dinner" value="COMPLEX_DINNER" name="typeSet">-->
+<#--                <div class="checkbox-container"></div>-->
+<#--                Комплексний обід-->
+<#--            </label>-->
+<#--            <label for="chemistry" class="light">-->
+<#--                <input type="radio" id="chemistry" value="CHEMISTRY" name="typeSet">-->
+<#--                <div class="checkbox-container"></div>-->
+<#--                Набір хімії для мам, які мають дітей до 1 року-->
+<#--            </label>-->
 
             <input type="text" hidden value="00-00" name="stream">
         </fieldset>
